@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, url_for
 from random import sample
 
 app = Flask(__name__)
@@ -11,6 +11,7 @@ def main():
 
 @app.route('/game')
 def game():
+    pass
 
 
 if __name__ == '__main__':
