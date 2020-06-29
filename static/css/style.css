@@ -21,3 +21,13 @@ body {
     border: 3px solid gray;
     border-radius: 5px;
 }
+
+.cell {
+    position: relative;
+    border-radius: 100%;
+    border: 5px solid cadetblue;
+    background: cornsilk;
+    width: 5em;
+    height: 5em;
+    display: inline-block;
+}
