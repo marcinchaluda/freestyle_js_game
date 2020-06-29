@@ -2,22 +2,56 @@ body {
     background-color: #404040;
 }
 
-.container {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-
+p {
+    font-size: 130%;
+    text-align: center;
+    color: whitesmoke;
 }
 
-.title {
+span {
     margin: 1em;
     color: whitesmoke;
     font-size: 200%;
 }
 
+.center {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.options{
+    display: flex;
+    justify-content: center;
+}
+
+.option {
+    margin: 0.5em;
+}
+
 .game_field {
-    width: 800px;
-    height: 500px;
+    background: url('/static/img/background.jpeg');
+    height: 27em;
+    width: 48em;
     border: 3px solid gray;
-    border-radius: 5px;
+    border-radius: 1em;
+}
+
+.button {
+    font-size: 1em;
+    background-color: #404040;
+    border: 1px solid black;
+    border-radius: 0.5em;
+    color: white;
+    padding: 0.5em;
+    text-align: center;
+    text-decoration: none;
+    /*display: inline-block;*/
+    /*margin: 0 0.5em;*/
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.button:hover {
+    background-color: #0794EA;
 }
