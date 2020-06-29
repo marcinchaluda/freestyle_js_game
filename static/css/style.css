@@ -31,3 +31,7 @@ body {
     height: 5em;
     display: inline-block;
 }
+
+.cell_drop {
+    background: burlywood;
+}
