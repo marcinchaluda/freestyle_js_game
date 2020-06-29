@@ -1,0 +1,23 @@
+body {
+    background-color: #404040;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+}
+
+.title {
+    margin: 1em;
+    color: whitesmoke;
+    font-size: 200%;
+}
+
+.game_field {
+    width: 800px;
+    height: 500px;
+    border: 3px solid gray;
+    border-radius: 5px;
+}
