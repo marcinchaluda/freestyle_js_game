@@ -2,6 +2,18 @@ body {
     background-color: #404040;
 }
 
+p {
+    font-size: 130%;
+    text-align: center;
+    color: whitesmoke;
+}
+
+span {
+    margin: 1em;
+    color: whitesmoke;
+    font-size: 200%;
+}
+
 .container {
     display: flex;
     align-items: center;
