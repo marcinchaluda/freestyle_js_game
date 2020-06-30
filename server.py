@@ -6,13 +6,13 @@ app = Flask(__name__)
 
 @app.route('/')
 def main():
-    return render_template('game.html')
+    return render_template('main.html')
 
 
 @app.route('/game')
 def game():
-    pass
+    return render_template('game.html')
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
