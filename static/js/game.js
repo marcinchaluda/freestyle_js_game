@@ -1,7 +1,8 @@
 CELL_SIZE = [7, 10, 11, 12];
-NUMBER_OF_CELLS = 10;
+NUMBER_OF_CELLS = 15;
 const VIRUSES = [];
-const gameField = document.querySelector('game-field')
+FIELD_WIDTH = 768;
+FIELD_HEIGHT = 250;
 
 initGame();
 
@@ -13,13 +14,12 @@ function initGame() {
 }
 
 function generateCells () {
-    const percentRandomizer = (distance) => ((Math.random() * distance) | 0) + '%';
     for (let i = 0; i < NUMBER_OF_CELLS; i++) {
         let cell = {
-            left: percentRandomizer(55),
-            top: percentRandomizer(0),
-            // centerX: this.offset.left + this.width / 2,
-            // centerY: this.offset.top + this.height / 2,
+            left: Math.floor(Math.random() * FIELD_HEIGHT),
+            top: Math.floor(Math.random() * FIELD_HEIGHT),
+            centerX: 0,
+            centerY: 0,
         };
         VIRUSES.push(cell)
     }
@@ -27,6 +27,7 @@ function generateCells () {
 }
 
 function insertVirusesOnGameField () {
+    let distanceFromStartPosition = 0;
     for (let i = 0; i < VIRUSES.length; i++) {
         const cellContainer = document.createElement('div');
         const virusImage = document.createElement("img");
@@ -34,9 +35,10 @@ function insertVirusesOnGameField () {
         virusImage.style.width = '100%';
         cellContainer.appendChild(virusImage);
         cellContainer.classList.add('cell');
-        cellContainer.style.left = VIRUSES[i].left;
-        cellContainer.style.top = VIRUSES[i].top;
+        cellContainer.style.left = `${VIRUSES[i].left - distanceFromStartPosition}px`;
+        cellContainer.style.top = `${VIRUSES[i].top}px`;
         cellContainer.style.width = `${CELL_SIZE[Math.floor(Math.random() * CELL_SIZE.length)]}%`;
+        distanceFromStartPosition += cellContainer.style.width;
         document.querySelector('.game_field').appendChild(cellContainer);
     }
 
