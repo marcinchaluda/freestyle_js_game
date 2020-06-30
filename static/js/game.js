@@ -3,7 +3,7 @@ NUMBER_OF_CELLS = 12;
 const VIRUSES = [];
 FIELD_WIDTH = 768;
 FIELD_HEIGHT = 250;
-
+REQIURED_DISTANCE = (FIELD_WIDTH * 0.12)/2;
 
 const cellHandlers = {
     dragStart: function (e) {
@@ -43,22 +43,36 @@ initGame();
 function initGame() {
 
     // Your game can start here, but define separate functions, don't write everything in here :)
-    generateCells();
-    insertVirusesOnGameField();
+    // generateCells();
+    // insertVirusesOnGameField();
 }
 
 function generateCells () {
-    const percentRandomizer = (distance) => ((Math.random() * distance) | 0) + '%';
     for (let i = 0; i < NUMBER_OF_CELLS; i++) {
         let cell = {
-            left: Math.floor(Math.random() * FIELD_HEIGHT),
+            left: Math.floor(Math.random() * FIELD_WIDTH),
             top: Math.floor(Math.random() * FIELD_HEIGHT),
-            centerX: 0,
-            centerY: 0,
         };
-        VIRUSES.push(cell)
+        calculateDistance(cell);
+        VIRUSES.push(cell);
     }
-    console.log(VIRUSES)
+}
+
+function calculateDistance(currentCell) {
+     let overlapping = false;
+     for (let j = 0; j < VIRUSES.length; j++){
+            let other_cell = VIRUSES[j];
+            let distance = Math.floor(Math.sqrt(Math.pow((other_cell.left + REQIURED_DISTANCE)
+                - (currentCell.left + REQIURED_DISTANCE), 2) + Math.pow((other_cell.top + REQIURED_DISTANCE)
+                - (currentCell.top + REQIURED_DISTANCE), 2)));
+            if (distance < (REQIURED_DISTANCE * 2)){
+                overlapping = true;
+                break;
+            }
+        }
+     if (!overlapping) {
+         VIRUSES.push(currentCell);
+     }
 }
 
 function insertVirusesOnGameField () {
@@ -79,7 +93,6 @@ function insertVirusesOnGameField () {
         if (i===0) cellContainer.textContent='50';
         document.querySelector('.game_field').appendChild(cellContainer);
     }
-
 }
 
 function addCellListeners(element) {
