@@ -1,9 +1,9 @@
-CELL_SIZE = [7, 10, 11, 12];
+CELL_SIZE = [6, 9, 10, 11];
 NUMBER_OF_CELLS = 12;
 const VIRUSES = [];
 FIELD_WIDTH = 768;
-FIELD_HEIGHT = 250;
-REQIURED_DISTANCE = (FIELD_WIDTH * 0.12)/2;
+FIELD_HEIGHT = 280;
+REQIURED_DISTANCE = (FIELD_WIDTH/2);
 
 const cellHandlers = {
     dragStart: function (e) {
@@ -43,15 +43,15 @@ initGame();
 function initGame() {
 
     // Your game can start here, but define separate functions, don't write everything in here :)
-    // generateCells();
-    // insertVirusesOnGameField();
+    generateCells();
+    insertVirusesOnGameField();
 }
 
 function generateCells () {
-    for (let i = 0; i < NUMBER_OF_CELLS; i++) {
+    while (VIRUSES.length < NUMBER_OF_CELLS) {
         let cell = {
-            left: Math.floor(Math.random() * FIELD_WIDTH),
-            top: Math.floor(Math.random() * FIELD_HEIGHT),
+            left: Math.floor(Math.random() * (FIELD_WIDTH/2)),
+            top: Math.floor(Math.random() * (FIELD_HEIGHT)),
         };
         calculateDistance(cell);
         VIRUSES.push(cell);
