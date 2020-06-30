@@ -30,8 +30,10 @@ const cellHandlers = {
         e.preventDefault();
         let draggedElement = document.getElementById(e.dataTransfer.getData('text/elementid'));
         if (!(e.target).isSameNode(draggedElement)) {
-            const population = e.dataTransfer.getData('text/plain');
-            e.target.textContent = population;
+            const population = Number(e.dataTransfer.getData('text/plain'));
+            // add 35% population to target and take 38% from source (lose 3%):
+            e.target.textContent = (Number(e.target.textContent) + population * 0.35 | 0).toString();
+            draggedElement.textContent = (population * 0.62 | 0).toString();
             console.log('drop');
         }
     }
@@ -75,6 +77,7 @@ function insertVirusesOnGameField () {
         distanceFromStartPosition += cellContainer.style.width;
         // Add test content to the first cell
         (i===0) ? cellContainer.textContent = '50' : cellContainer.innerHTML = '&nbsp;';
+        grow(cellContainer);
         document.querySelector('.game_field').appendChild(cellContainer);
     }
 
@@ -88,4 +91,16 @@ function addCellListeners(element) {
     element.addEventListener('dragover', cellHandlers.dragOver);
     element.addEventListener('dragleave', cellHandlers.dragLeave );
     element.addEventListener('drop', cellHandlers.drop);
+}
+
+function grow(cell) {
+    const breed = function () {
+        let population = Number(cell.textContent);
+        if (population > 0) {
+            let brood = (population * (Math.random() * 3 + 3 | 0) * 0.01) | 0; // generates integer 3-5% population
+            population += (brood > 0) ? brood : 1;
+            (cell.textContent < 151) ? cell.textContent = population.toString() : cell.textContent = 150;
+        }
+    }
+    setInterval(breed, 300 + (Math.random() * 300) | 0);
 }
