@@ -14,6 +14,19 @@ span {
     font-size: 200%;
 }
 
+.container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+}
+
+.title {
+    margin: 1em;
+    color: whitesmoke;
+    font-size: 200%;
+}
+
 .center {
     display: flex;
     align-items: center;
@@ -26,12 +39,19 @@ span {
 }
 
 .option {
+    border-radius: 100%;
     margin: 0.5em;
 }
+.option_clicked{
+    border-radius: 100%;
+    margin: 0.5em;
+    box-shadow: 0 0.5em 0.5em 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+}
+
 
 .game_field {
-    position: relative;
-    background: url('/static/img/background.jpeg');
+    background: linear-gradient(to bottom, rgba(50, 50, 50, 0.8) 0%,
+    rgba(50, 50, 50, 0.8) 100%), url('/static/img/background.jpeg');
     height: 27em;
     width: 48em;
     border: 3px solid gray;
