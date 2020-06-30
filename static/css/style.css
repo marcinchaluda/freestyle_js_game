@@ -60,10 +60,11 @@ span {
 .cell {
     position: relative;
     display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    /* TEST PROPERTIES: */
     color: #c7ff5c;
     font-size: 1.5em;
     font-weight: bolder;
     font-family: 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana', sans-serif;
-    justify-content: center;
-    align-items: center;
 }

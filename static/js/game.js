@@ -3,9 +3,8 @@ NUMBER_OF_CELLS = 12;
 const VIRUSES = [];
 FIELD_WIDTH = 768;
 FIELD_HEIGHT = 250;
-const gameField = document.querySelector('game-field');
 
-// event handler functions
+
 const cellHandlers = {
     dragStart: function (e) {
         e.dataTransfer.setData('text/plain', e.target.innerText);
@@ -37,17 +36,6 @@ const cellHandlers = {
             console.log('drop');
         }
     }
-
-}
-
-const addCellListeners = function (element) {
-    element.setAttribute('draggable', 'true');
-    element.addEventListener('dragstart', cellHandlers.dragStart);
-    element.addEventListener('dragend', cellHandlers.dragEnd);
-    element.addEventListener('dragenter', cellHandlers.dragEnter);
-    element.addEventListener('dragover', cellHandlers.dragOver);
-    element.addEventListener('dragleave', cellHandlers.dragLeave );
-    element.addEventListener('drop', cellHandlers.drop);
 }
 
 initGame();
@@ -92,4 +80,14 @@ function insertVirusesOnGameField () {
         document.querySelector('.game_field').appendChild(cellContainer);
     }
 
+}
+
+function addCellListeners(element) {
+    element.setAttribute('draggable', 'true');
+    element.addEventListener('dragstart', cellHandlers.dragStart);
+    element.addEventListener('dragend', cellHandlers.dragEnd);
+    element.addEventListener('dragenter', cellHandlers.dragEnter);
+    element.addEventListener('dragover', cellHandlers.dragOver);
+    element.addEventListener('dragleave', cellHandlers.dragLeave );
+    element.addEventListener('drop', cellHandlers.drop);
 }
