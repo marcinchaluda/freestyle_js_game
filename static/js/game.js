@@ -1,7 +1,52 @@
 CELL_SIZE = [7, 10, 11, 12];
 NUMBER_OF_CELLS = 10;
 const VIRUSES = [];
-const gameField = document.querySelector('game-field')
+const gameField = document.querySelector('game-field');
+
+// event handler functions
+const cellHandlers = {
+    dragStart: function (e) {
+        e.dataTransfer.setData('text/plain', e.target.innerText);
+        e.target.setAttribute('id', Date.now());
+        e.dataTransfer.setData('text/elementid', e.id)
+        console.log('dragstart');
+    },
+    dragEnd: function (e) {
+        console.log('dragend');
+    },
+    dragEnter : function (e) {
+        e.preventDefault();
+        e.target.classList.add(/* state change of drop target class */);
+        console.log('dragenter');
+    },
+    dragOver: function (e) {
+        e.preventDefault();
+        console.log('dragover');
+    },
+    dragLeave: function (e) {
+        console.log('dragleave');
+    },
+    drop: function (e) {
+        e.preventDefault();
+        console.log('drop');
+        let draggedElement = document.getElementById(e.dataTransfer.getData('text/elementid'));
+        if (!(e.target).isSameNode(draggedElement)) {
+            const population = e.dataTransfer.getData('text/plain');
+            e.target.textContent = population;
+        }
+    }
+
+}
+
+const addCellListeners = function (element) {
+    element.setAttribute('draggable', 'true');
+    element.addEventListener('dragstart', cellHandlers.dragStart);
+    element.addEventListener('dragend', cellHandlers.dragEnd);
+    element.addEventListener('dragenter', cellHandlers.dragEnter);
+    element.addEventListener('dragover', cellHandlers.dragOver);
+    element.addEventListener('dragleave', cellHandlers.dragLeave );
+    element.addEventListener('drop', cellHandlers.drop);
+}
 
 initGame();
 
@@ -16,8 +61,8 @@ function generateCells () {
     const percentRandomizer = (distance) => ((Math.random() * distance) | 0) + '%';
     for (let i = 0; i < NUMBER_OF_CELLS; i++) {
         let cell = {
-            left: percentRandomizer(55),
-            top: percentRandomizer(0),
+            left: percentRandomizer(3),
+            top: percentRandomizer(60),
             // centerX: this.offset.left + this.width / 2,
             // centerY: this.offset.top + this.height / 2,
         };
@@ -37,6 +82,7 @@ function insertVirusesOnGameField () {
         cellContainer.style.left = VIRUSES[i].left;
         cellContainer.style.top = VIRUSES[i].top;
         cellContainer.style.width = `${CELL_SIZE[Math.floor(Math.random() * CELL_SIZE.length)]}%`;
+        addCellListeners(cellContainer);
         document.querySelector('.game_field').appendChild(cellContainer);
     }
 

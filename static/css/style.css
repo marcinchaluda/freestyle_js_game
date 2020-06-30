@@ -58,5 +58,5 @@ span {
 
 .cell {
     position: relative;
-
+    display: inline-block;
 }
