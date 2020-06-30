@@ -1,10 +1,5 @@
 const options = document.querySelectorAll('.option');
 
-
-// for(let i = 0; i < options.length; i++) {
-//    options[i].addEventListener('click', mark);
-// }
-
 options.forEach(setEvents);
 
 function setEvents(option){
