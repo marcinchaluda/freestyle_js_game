@@ -7,8 +7,8 @@ const gameField = document.querySelector('game-field');
 const cellHandlers = {
     dragStart: function (e) {
         e.dataTransfer.setData('text/plain', e.target.innerText);
-        e.target.setAttribute('id', Date.now());
-        e.dataTransfer.setData('text/elementid', e.id)
+        e.target.id = Date.now().toString();
+        e.dataTransfer.setData('text/elementid', e.target.id)
         console.log('dragstart');
     },
     dragEnd: function (e) {
@@ -28,11 +28,11 @@ const cellHandlers = {
     },
     drop: function (e) {
         e.preventDefault();
-        console.log('drop');
         let draggedElement = document.getElementById(e.dataTransfer.getData('text/elementid'));
         if (!(e.target).isSameNode(draggedElement)) {
             const population = e.dataTransfer.getData('text/plain');
             e.target.textContent = population;
+            console.log('drop');
         }
     }
 
