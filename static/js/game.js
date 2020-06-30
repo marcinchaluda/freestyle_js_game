@@ -1,5 +1,5 @@
 //TEMPORARY GLOBAL DATA
-let cellsCount = 8;
+let cellsCount =20;
 const game_field = document.querySelector('.game_field');
 
 initGame();
