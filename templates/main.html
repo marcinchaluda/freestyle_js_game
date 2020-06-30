@@ -2,9 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>BDM - Phage Wars</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-<a href="/game">START</a>
+
+<div class="container center">
+        <div class="title">
+            <span>BDM - Phage Wars</span>
+        </div>
+        <div class="game_field center">
+            <div id="main_menu">
+                <div> <p>You are a deadly virus. <br>
+                    Your job is to infect all the cells in your body. <br>
+                    <b>But watch out!</b><br>
+                    The organism is also infected with other viruses! <br>
+                    Choose the right strategy and beat your opponents. <br>
+                    Good luck!</p></div>
+                <div><span>Please select your phage color!</span></div>
+                <div class="options">
+                    <div class="option green"><img src="/static/img/virus_green.png" alt="green" width="100"></div>
+                    <div class="option yellow"><img src="/static/img/virus_yellow.png" alt="green" width="100"></div>
+                    <div class="option blue"><img src="/static/img/virus_blue.png" alt="green" width="100"></div>
+                    <div class="option purple"><img src="/static/img/virus_purple.png" alt="green" width="100"></div>
+                </div>
+                <div class="center">
+                    <a class="button" href="/game">START</a>
+                </div>
+            </div>
+        </div>
+        <div class="stats">
+        </div>
+    </div>
 </body>
 </html>
