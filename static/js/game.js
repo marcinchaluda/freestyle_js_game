@@ -96,10 +96,12 @@ function addCellListeners(element) {
 function grow(cell) {
     const breed = function () {
         let population = Number(cell.textContent);
+        const populationCap = Number(cell.style.width.replace('%', '')) * 10 | 0;
         if (population > 0) {
             let brood = (population * (Math.random() * 3 + 3 | 0) * 0.01) | 0; // generates integer 3-5% population
             population += (brood > 0) ? brood : 1;
-            (cell.textContent < 151) ? cell.textContent = population.toString() : cell.textContent = 150;
+            (cell.textContent <= populationCap) ?
+                cell.textContent = population.toString() : cell.textContent = populationCap;
         }
     }
     setInterval(breed, 300 + (Math.random() * 300) | 0);
