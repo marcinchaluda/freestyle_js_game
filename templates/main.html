@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>BDM - Phage Wars</title>
+    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename= 'img/virus_yellow.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="static/js/main.js" defer></script>
 </head>
@@ -23,10 +24,10 @@
                 <div><span>Please select your phage color!</span></div>
                 <form action="/game">
                     <div class="options">
-                        <div class="option green"><img src="/static/img/virus_green.png" alt="green" width="100"></div>
-                        <div class="option yellow"><img src="/static/img/virus_yellow.png" alt="green" width="100"></div>
-                        <div class="option blue"><img src="/static/img/virus_blue.png" alt="green" width="100"></div>
-                        <div class="option purple"><img src="/static/img/virus_purple.png" alt="green" width="100"></div>
+                        <div class="option" id="green"><img src="/static/img/virus_green.png" alt="green" width="100"></div>
+                        <div class="option" id="yellow"><img src="/static/img/virus_yellow.png" alt="green" width="100"></div>
+                        <div class="option" id="blue"><img src="/static/img/virus_blue.png" alt="green" width="100"></div>
+                        <div class="option" id="purple"><img src="/static/img/virus_purple.png" alt="green" width="100"></div>
                     </div>
                     <div class="center">
                         <button class="button" type="submit">START</button>

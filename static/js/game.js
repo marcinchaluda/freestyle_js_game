@@ -4,7 +4,7 @@ const VIRUSES = [];
 FIELD_WIDTH = 768;
 FIELD_HEIGHT = 250;
 FIELD_RATIO = 1.778
-
+const PLAYER_COLOR = localStorage.getItem("playerColor"); //Variable with selected color by player
 const cellHandlers = {
     dragStart: function (e) {
         e.dataTransfer.setData('text/plain', e.target.innerText);
