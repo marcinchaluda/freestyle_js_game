@@ -53,6 +53,7 @@ function generateCells () {
         let cell = {
             left: Math.floor(Math.random() * FIELD_HEIGHT),
             top: Math.floor(Math.random() * FIELD_HEIGHT),
+            avatar: 'default',
             centerX: 0,
             centerY: 0,
         };
@@ -65,7 +66,7 @@ function insertVirusesOnGameField () {
     let distanceFromStartPosition = 0;
     for (let i = 0; i < VIRUSES.length; i++) {
         const cellContainer = document.createElement('div');
-        cellContainer.style.background = "url('static/img/virus_default.png')";
+        cellContainer.style.background = `url('static/img/virus_${VIRUSES[i].avatar}.png')`;
         cellContainer.style.backgroundSize = 'cover';
         cellContainer.classList.add('cell');
         cellContainer.style.left = `${VIRUSES[i].left - distanceFromStartPosition}px`;
@@ -76,8 +77,16 @@ function insertVirusesOnGameField () {
         addCellListeners(cellContainer);
         distanceFromStartPosition += cellContainer.style.width;
         // Add test content to the first cell
-        (i===0) ? cellContainer.textContent = '50' : cellContainer.innerHTML = '&nbsp;';
         grow(cellContainer);
+        switch (i){
+            case 0:
+                cellContainer.textContent = '50';
+                cellContainer.style.background = `url('static/img/virus_${PLAYER_COLOR}.png')`;
+                cellContainer.style.backgroundSize = 'cover';
+                break;
+            default:
+                cellContainer.innerHTML = '&nbsp;';
+        }
         document.querySelector('.game_field').appendChild(cellContainer);
     }
 
@@ -98,6 +107,8 @@ function grow(cell) {
         let population = Number(cell.textContent);
         const populationCap = Number(cell.style.width.replace('%', '')) * 10 | 0;
         if (population > 0) {
+            cell.style.background = `url('static/img/virus_${PLAYER_COLOR}.png')`; //add color when infected
+            cell.style.backgroundSize = 'cover';
             let brood = (population * (Math.random() * 3 + 3 | 0) * 0.01) | 0; // generates integer 3-5% population
             population += (brood > 0) ? brood : 1;
             (cell.textContent <= populationCap) ?
