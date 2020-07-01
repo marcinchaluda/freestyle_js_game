@@ -55,6 +55,7 @@ span {
 
 
 .game_field {
+    /*overflow: hidden;*/
     background: linear-gradient(to bottom, rgba(50, 50, 50, 0.8) 0%,
     rgba(50, 50, 50, 0.8) 100%), url('/static/img/background.jpeg');
     height: 27em;
