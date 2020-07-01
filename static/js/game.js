@@ -4,7 +4,15 @@ const VIRUSES = [];
 FIELD_WIDTH = 768;
 FIELD_HEIGHT = 250;
 FIELD_RATIO = 1.778
+START_POSITION = 20;
+OFFSET_X = 100;
+OFFSET_Y = 80;
+RANDOM_MARGIN_ARRAY = [() => Math.floor(Math.random() * 75 | 0),
+        () => Math.floor(Math.random() * 95 | 0),
+        () => Math.floor(Math.random() * 85 | 0),
+        () => Math.floor(Math.random() * 100 | 0)];
 const PLAYER_COLOR = localStorage.getItem("playerColor"); //Variable with selected color by player
+
 const cellHandlers = {
     dragStart: function (e) {
         e.dataTransfer.setData('text/plain', e.target.innerText);
@@ -50,42 +58,29 @@ function initGame() {
 }
 
 function cellArrange() {
-    let max = 100, min =0;
-    let x = 20, y=20;
-    for (let i=0; i < 3; i++) {
-        for (let j=0; j<5; j++) {
+    let x = START_POSITION, y=START_POSITION;
+
+    for (let i=0; i < 5; i++) {
+        y = START_POSITION;
+        for (let j=0; j<3; j++) {
             let cell = {
-                left: x,
-                top: y,
+                left: x + offsetPosition(),
+                top: y + offsetPosition(),
                 avatar: 'default'
             }
-
-            y = Math.floor(Math.random() * (max - min) ) + min;
+            y += OFFSET_Y + RANDOM_MARGIN_ARRAY[Math.floor(Math.random() * RANDOM_MARGIN_ARRAY.length)]();
             VIRUSES.push(cell);
-
-
         }
-        min += 100;
-        max += 100;
+        x += OFFSET_X + RANDOM_MARGIN_ARRAY[Math.floor(Math.random() * RANDOM_MARGIN_ARRAY.length)]();
     }
-
 }
 
-
-
-
-
-function generateCells () {
-    for (let i = 0; i < NUMBER_OF_CELLS; i++) {
-        let cell = {
-            left: Math.floor(Math.random() * FIELD_HEIGHT),
-            top: Math.floor(Math.random() * FIELD_HEIGHT),
-            centerX: 0,
-            centerY: 0,
-        };
-        VIRUSES.push(cell)
+function offsetPosition() {
+    let randomNumber = Math.floor(Math.random() * START_POSITION);
+    if (randomNumber <= (START_POSITION/2)) {
+        return -randomNumber;
     }
-    console.log(VIRUSES)
+    return randomNumber;
 }
 
 function insertVirusesOnGameField () {
