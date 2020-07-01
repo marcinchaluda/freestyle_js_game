@@ -86,3 +86,23 @@ span {
     font-weight: bolder;
     font-family: 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana', sans-serif;
 }
+
+.default {
+    background-image: url('/static/img/virus_default.png');
+}
+
+.blue {
+    background-image: url('/static/img/virus_blue.png');
+}
+
+.green {
+    background-image: url('/static/img/virus_green.png');
+}
+
+.purple {
+    background-image: url('/static/img/virus_purple.png');
+}
+
+.yellow {
+    background-image: url('/static/img/virus_yellow.png');
+}

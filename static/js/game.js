@@ -11,6 +11,7 @@ RANDOM_MARGIN_ARRAY = [() => Math.floor(Math.random() * 75 | 0),
         () => Math.floor(Math.random() * 95 | 0),
         () => Math.floor(Math.random() * 85 | 0),
         () => Math.floor(Math.random() * 100 | 0)];
+AVATAR_COLORS = ['blue', 'green', 'purple', 'yellow'];
 const PLAYER_COLOR = localStorage.getItem("playerColor"); //Variable with selected color by player
 
 const cellHandlers = {
@@ -42,6 +43,16 @@ const cellHandlers = {
             // add 35% population to target and take 38% from source (lose 3%):
             e.target.textContent = (Number(e.target.textContent) + population * 0.35 | 0).toString();
             draggedElement.textContent = (population * 0.62 | 0).toString();
+            // set infected cell color
+            let sourceColor;
+            AVATAR_COLORS.forEach(color => {
+                if (draggedElement.classList.contains(color)){
+                    sourceColor = color;
+                }
+            });
+            e.target.className = 'cell';
+            e.target.classList.add(sourceColor);
+            console.log()
             console.log('drop');
         }
     }
@@ -54,6 +65,7 @@ function initGame() {
     // Your game can start here, but define separate functions, don't write everything in here :)
     // generateCells();
     cellArrange();
+    selectEnemy();
     insertVirusesOnGameField();
 }
 
@@ -86,7 +98,7 @@ function offsetPosition() {
 function insertVirusesOnGameField () {
     for (let i = 0; i < VIRUSES.length; i++) {
         const cellContainer = document.createElement('div');
-        cellContainer.style.background = `url('static/img/virus_${VIRUSES[i].avatar}.png')`;
+        cellContainer.classList.add(VIRUSES[i].avatar);
         cellContainer.style.backgroundSize = 'cover';
         cellContainer.classList.add('cell');
         cellContainer.style.left = `${VIRUSES[i].left}px`;
@@ -100,8 +112,11 @@ function insertVirusesOnGameField () {
         switch (i){
             case 0:
                 cellContainer.textContent = '50';
-                cellContainer.style.background = `url('static/img/virus_${PLAYER_COLOR}.png')`;
+                cellContainer.classList.add(PLAYER_COLOR);
                 cellContainer.style.backgroundSize = 'cover';
+                break;
+            case (VIRUSES.length - 1):
+                cellContainer.textContent = '50';
                 break;
             default:
                 cellContainer.innerHTML = '&nbsp;';
@@ -126,8 +141,9 @@ function grow(cell) {
         let population = Number(cell.textContent);
         const populationCap = Number(cell.style.width.replace('%', '')) * 10 | 0;
         if (population > 0) {
-            cell.style.background = `url('static/img/virus_${PLAYER_COLOR}.png')`; //add color when infected
-            cell.style.backgroundSize = 'cover';
+            // let color = cell.avatar == PLAYER_COLOR ? PLAYER_COLOR : cell.avatar;
+            // cell.style.background = `url('static/img/virus_${color}.png')`; //add color when infected
+            // cell.style.backgroundSize = 'cover';
             let brood = (population * (Math.random() * 3 + 3 | 0) * 0.01) | 0; // generates integer 3-5% population
             population += (brood > 0) ? brood : 1;
             (cell.textContent <= populationCap) ?
@@ -135,4 +151,13 @@ function grow(cell) {
         }
     }
     setInterval(breed, 300 + (Math.random() * 300) | 0);
+}
+
+function selectEnemy() {
+    const enemy = VIRUSES[VIRUSES.length-1];
+    let enemyColor = PLAYER_COLOR;
+    while (enemyColor === PLAYER_COLOR) {
+        enemyColor = AVATAR_COLORS[Math.floor(Math.random() * AVATAR_COLORS.length)];
+    }
+    enemy.avatar = enemyColor;
 }
