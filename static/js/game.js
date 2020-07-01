@@ -5,6 +5,7 @@ FIELD_WIDTH = 768;
 FIELD_HEIGHT = 280;
 REQIURED_DISTANCE = (100/2);
 FIELD_RATIO = 1.778;
+const PLAYER_COLOR = localStorage.getItem("playerColor"); //Variable with selected color by player
 
 const cellHandlers = {
     dragStart: function (e) {
