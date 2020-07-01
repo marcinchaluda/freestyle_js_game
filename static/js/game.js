@@ -52,6 +52,7 @@ const cellHandlers = {
             });
             e.target.className = 'cell';
             e.target.classList.add(sourceColor);
+            e.target.setAttribute('draggable', 'true');
             console.log()
             console.log('drop');
         }
@@ -114,12 +115,14 @@ function insertVirusesOnGameField () {
                 cellContainer.textContent = '50';
                 cellContainer.classList.add(PLAYER_COLOR);
                 cellContainer.style.backgroundSize = 'cover';
+                cellContainer.setAttribute('draggable', 'true');
                 break;
             case (VIRUSES.length - 1):
                 cellContainer.textContent = '50';
+                cellContainer.setAttribute('draggable', 'true');
                 break;
             default:
-                cellContainer.innerHTML = '&nbsp;';
+                // cellContainer.innerHTML = '&nbsp;';
         }
         document.querySelector('.game_field').appendChild(cellContainer);
     }
@@ -127,7 +130,6 @@ function insertVirusesOnGameField () {
 }
 
 function addCellListeners(element) {
-    element.setAttribute('draggable', 'true');
     element.addEventListener('dragstart', cellHandlers.dragStart);
     element.addEventListener('dragend', cellHandlers.dragEnd);
     element.addEventListener('dragenter', cellHandlers.dragEnter);
