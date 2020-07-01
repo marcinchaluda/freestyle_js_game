@@ -50,7 +50,8 @@ function initGame() {
 }
 
 function generateCells () {
-    while(VIRUSES.length < NUMBER_OF_CELLS) {
+    for (let i = 0; i < NUMBER_OF_CELLS; i++) {
+    // while(VIRUSES.length < NUMBER_OF_CELLS) {
         let cell = {
             left: Math.floor(Math.random() * (FIELD_WIDTH/1.5)),
             top: Math.floor(Math.random() * (FIELD_HEIGHT)),
@@ -62,18 +63,27 @@ function generateCells () {
 }
 
 function calculateDistance(currentCell) {
+    if (VIRUSES.length === 0) {
+        VIRUSES.push(currentCell);
+    }
      let overlapping = false;
      for (let j = 0; j < VIRUSES.length; j++){
-            let other_cell = VIRUSES[j];
-            let distance = Math.floor(Math.sqrt(Math.pow(Math.abs(currentCell.left - other_cell.left), 2) +
-            Math.pow(Math.abs(currentCell.top - other_cell.top), 2)));
-
-             if (distance <= Math.abs(currentCell.left - other_cell.left) || distance <= Math.abs(currentCell.top - other_cell.top)){
-                 overlapping = true;
-                 break;
+            let otherCell = VIRUSES[j];
+            // let distance = Math.floor(Math.sqrt(Math.pow(Math.abs(currentCell.left - otherCell.left), 2) +
+            // Math.pow(Math.abs(currentCell.top - otherCell.top), 2)));
+            //
+            //  if (distance <= Math.abs(currentCell.left - otherCell.left) || distance <= Math.abs(currentCell.top - otherCell.top)){
+            //      overlapping = true;
+            //      break;
+            //  }
+             if (currentCell.left + currentCell.width < otherCell.left ||
+                 currentCell.left > otherCell.left + otherCell.width &&
+                 currentCell.top + currentCell.width < otherCell.top ||
+                 currentCell.top > otherCell.top + otherCell.width) {
+                overlapping = true;
              }
          }
-     if (!overlapping) {
+     if (overlapping) {
          VIRUSES.push(currentCell);
      }
 }
@@ -107,3 +117,4 @@ function addCellListeners(element) {
     element.addEventListener('dragleave', cellHandlers.dragLeave );
     element.addEventListener('drop', cellHandlers.drop);
 }
+
