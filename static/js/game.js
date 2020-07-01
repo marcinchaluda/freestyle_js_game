@@ -65,6 +65,7 @@ function generateCells () {
 function calculateDistance(currentCell) {
     if (VIRUSES.length === 0) {
         VIRUSES.push(currentCell);
+        return;
     }
      let overlapping = false;
      for (let j = 0; j < VIRUSES.length; j++){
@@ -76,14 +77,15 @@ function calculateDistance(currentCell) {
             //      overlapping = true;
             //      break;
             //  }
-             if (currentCell.left + currentCell.width < otherCell.left ||
-                 currentCell.left > otherCell.left + otherCell.width &&
+             if (!(currentCell.left + currentCell.width < otherCell.left ||
+                 currentCell.left > otherCell.left + otherCell.width ||
                  currentCell.top + currentCell.width < otherCell.top ||
-                 currentCell.top > otherCell.top + otherCell.width) {
+                 currentCell.top > otherCell.top + otherCell.width)) {
                 overlapping = true;
+                break;
              }
          }
-     if (overlapping) {
+     if (!overlapping) {
          VIRUSES.push(currentCell);
      }
 }
