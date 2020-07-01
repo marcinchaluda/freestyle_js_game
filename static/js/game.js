@@ -50,20 +50,23 @@ function initGame() {
 }
 
 function cellArrange() {
-    let max = 100;
-    for (let i=0; i < 5; i++) {
-        let x = 20, y=20, min =0;
-        for (let j=0; j<4; j++) {
+    let max = 100, min =0;
+    let x = 20, y=20;
+    for (let i=0; i < 3; i++) {
+        for (let j=0; j<5; j++) {
             let cell = {
                 left: x,
                 top: y,
                 avatar: 'default'
             }
-            y += Math.floor(Math.random() * (max - min) ) + min;
+
+            y = Math.floor(Math.random() * (max - min) ) + min;
             VIRUSES.push(cell);
-            min += 100;
+
 
         }
+        min += 100;
+        max += 100;
     }
 
 }
