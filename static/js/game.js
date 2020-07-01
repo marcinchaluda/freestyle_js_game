@@ -44,9 +44,33 @@ initGame();
 function initGame() {
 
     // Your game can start here, but define separate functions, don't write everything in here :)
-    generateCells();
+    // generateCells();
+    cellArrange();
     insertVirusesOnGameField();
 }
+
+function cellArrange() {
+    let max = 100;
+    for (let i=0; i < 5; i++) {
+        let x = 20, y=20, min =0;
+        for (let j=0; j<4; j++) {
+            let cell = {
+                left: x,
+                top: y,
+                avatar: 'default'
+            }
+            y += Math.floor(Math.random() * (max - min) ) + min;
+            VIRUSES.push(cell);
+            min += 100;
+
+        }
+    }
+
+}
+
+
+
+
 
 function generateCells () {
     for (let i = 0; i < NUMBER_OF_CELLS; i++) {
@@ -62,19 +86,17 @@ function generateCells () {
 }
 
 function insertVirusesOnGameField () {
-    let distanceFromStartPosition = 0;
     for (let i = 0; i < VIRUSES.length; i++) {
         const cellContainer = document.createElement('div');
         cellContainer.style.background = "url('static/img/virus_default.png')";
         cellContainer.style.backgroundSize = 'cover';
         cellContainer.classList.add('cell');
-        cellContainer.style.left = `${VIRUSES[i].left - distanceFromStartPosition}px`;
+        cellContainer.style.left = `${VIRUSES[i].left}px`;
         cellContainer.style.top = `${VIRUSES[i].top}px`;
         cellContainer.style.width = `${CELL_SIZE[Math.floor(Math.random() * CELL_SIZE.length)]}%`;
         cellContainer.style.height = Number(cellContainer.style.width.replace('%', ''))
             * FIELD_RATIO + '%';
         addCellListeners(cellContainer);
-        distanceFromStartPosition += cellContainer.style.width;
         // Add test content to the first cell
         (i===0) ? cellContainer.textContent = '50' : cellContainer.innerHTML = '&nbsp;';
         grow(cellContainer);
