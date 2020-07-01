@@ -14,13 +14,6 @@ span {
     font-size: 200%;
 }
 
-.container {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-
-}
-
 .title {
     margin: 1em;
     color: whitesmoke;
@@ -74,8 +67,6 @@ span {
     padding: 0.5em;
     text-align: center;
     text-decoration: none;
-    /*display: inline-block;*/
-    /*margin: 0 0.5em;*/
     cursor: pointer;
     transition: 0.5s;
 }
