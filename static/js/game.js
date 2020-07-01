@@ -3,7 +3,8 @@ NUMBER_OF_CELLS = 12;
 const VIRUSES = [];
 FIELD_WIDTH = 768;
 FIELD_HEIGHT = 280;
-REQIURED_DISTANCE = (FIELD_WIDTH/2);
+REQIURED_DISTANCE = (100/2);
+FIELD_RATIO = 1.778;
 
 const cellHandlers = {
     dragStart: function (e) {
@@ -48,13 +49,14 @@ function initGame() {
 }
 
 function generateCells () {
-    while (VIRUSES.length < NUMBER_OF_CELLS) {
+    while(VIRUSES.length < NUMBER_OF_CELLS) {
         let cell = {
-            left: Math.floor(Math.random() * (FIELD_WIDTH/2)),
+            left: Math.floor(Math.random() * (FIELD_WIDTH/1.5)),
             top: Math.floor(Math.random() * (FIELD_HEIGHT)),
+            avatar: 'virus_default',
+            width: CELL_SIZE[Math.floor(Math.random() * CELL_SIZE.length)],
         };
         calculateDistance(cell);
-        VIRUSES.push(cell);
     }
 }
 
@@ -62,14 +64,14 @@ function calculateDistance(currentCell) {
      let overlapping = false;
      for (let j = 0; j < VIRUSES.length; j++){
             let other_cell = VIRUSES[j];
-            let distance = Math.floor(Math.sqrt(Math.pow((other_cell.left + REQIURED_DISTANCE)
-                - (currentCell.left + REQIURED_DISTANCE), 2) + Math.pow((other_cell.top + REQIURED_DISTANCE)
-                - (currentCell.top + REQIURED_DISTANCE), 2)));
-            if (distance < (REQIURED_DISTANCE * 2)){
-                overlapping = true;
-                break;
-            }
-        }
+            let distance = Math.floor(Math.sqrt(Math.pow(Math.abs(currentCell.left - other_cell.left), 2) +
+            Math.pow(Math.abs(currentCell.top - other_cell.top), 2)));
+
+             if (distance <= Math.abs(currentCell.left - other_cell.left) || distance <= Math.abs(currentCell.top - other_cell.top)){
+                 overlapping = true;
+                 break;
+             }
+         }
      if (!overlapping) {
          VIRUSES.push(currentCell);
      }
@@ -79,14 +81,14 @@ function insertVirusesOnGameField () {
     let distanceFromStartPosition = 0;
     for (let i = 0; i < VIRUSES.length; i++) {
         const cellContainer = document.createElement('div');
-        cellContainer.style.background = "url('static/img/virus_default.png')";
+        cellContainer.style.background = `url('static/img/${VIRUSES[i].avatar}.png')`;
         cellContainer.style.backgroundSize = 'cover';
         cellContainer.classList.add('cell');
         cellContainer.style.left = `${VIRUSES[i].left - distanceFromStartPosition}px`;
         cellContainer.style.top = `${VIRUSES[i].top}px`;
-        cellContainer.style.width = `${CELL_SIZE[Math.floor(Math.random() * CELL_SIZE.length)]}%`;
+        cellContainer.style.width = `${VIRUSES[i].width}%`;
         cellContainer.style.height = Number(cellContainer.style.width.replace('%', ''))
-            * 1.778 + '%';
+            * FIELD_RATIO + '%';
         addCellListeners(cellContainer);
         distanceFromStartPosition += cellContainer.style.width;
         // Add test content to first cell
