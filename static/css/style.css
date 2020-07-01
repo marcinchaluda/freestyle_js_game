@@ -14,13 +14,6 @@ span {
     font-size: 200%;
 }
 
-.container {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-
-}
-
 .title {
     margin: 1em;
     color: whitesmoke;
@@ -55,6 +48,8 @@ span {
 
 
 .game_field {
+    overflow: hidden;
+    position: relative;
     background: linear-gradient(to bottom, rgba(50, 50, 50, 0.8) 0%,
     rgba(50, 50, 50, 0.8) 100%), url('/static/img/background.jpeg');
     height: 27em;
@@ -72,8 +67,6 @@ span {
     padding: 0.5em;
     text-align: center;
     text-decoration: none;
-    /*display: inline-block;*/
-    /*margin: 0 0.5em;*/
     cursor: pointer;
     transition: 0.5s;
 }
@@ -83,7 +76,7 @@ span {
 }
 
 .cell {
-    position: relative;
+    position: absolute;
     display: inline-flex;
     justify-content: center;
     align-items: center;
