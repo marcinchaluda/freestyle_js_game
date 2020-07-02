@@ -107,3 +107,16 @@ span {
 .yellow {
     background-image: url('/static/img/virus_yellow.png');
 }
+
+#endScreen {
+    border-radius: 1em;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom:0;
+    margin: auto;
+    height: 275px;
+    width: 380px;
+    background-size: cover;
+}
