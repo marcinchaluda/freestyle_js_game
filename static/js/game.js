@@ -16,19 +16,18 @@ const PLAYER_COLOR = localStorage.getItem("playerColor"); //Variable with select
 const GROWTH_RATE = 450; //millisecond growth interval
 let enemyColor;
 //SOUND EFFECTS
-const gameStart = new Sound('static/audio/game_start.mp3'); //TODO refactor to loop
-const growth1 = new Sound('static/audio/growth1.mp3');
-const growth2 = new Sound('static/audio/growth2.mp3');
-const growth3 = new Sound('static/audio/growth3.mp3');
-const growth4 = new Sound('static/audio/growth4.mp3');
-const GROWTHS = [growth1, growth2, growth3, growth4];
-const pop1 = new Sound('static/audio/pop1.mp3');
-const pop2 = new Sound('static/audio/pop2.mp3');
-const pop3 = new Sound('static/audio/pop3.mp3');
-const pop4 = new Sound('static/audio/pop4.mp3');
-const pop5 = new Sound('static/audio/pop4.mp3');
-const POPS = [pop1, pop2, pop3, pop4, pop5];
+const gameStart = new Sound('static/audio/game_start.mp3');
+const GROWTHS = generateSoundsArray('growth', 4);
+const POPS = generateSoundsArray('pop', 5);
 
+
+function generateSoundsArray(type, howMany) {
+    let pops =[];
+    for(let i = 1; i < howMany + 1; i++) {
+        pops.push(new Sound(`static/audio/${type}${i}.mp3`));
+    }
+    return pops
+}
 
 const cellHandlers = {
     dragStart: function (e) {
@@ -56,6 +55,7 @@ const cellHandlers = {
     },
     drop: function (e) {
         e.preventDefault();
+        pickRandomFrom(GROWTHS).play()
         let draggedElement = document.getElementById(e.dataTransfer.getData('text/elementid'));
         if ((e.target).isSameNode(draggedElement) || draggedElement == null) {
             return
@@ -79,7 +79,6 @@ const cellHandlers = {
         if (sourceColor) e.target.classList.add(sourceColor);
         e.target.setAttribute('draggable', 'true');
         addPlayerListeners(e.target);
-        pickRandomFrom(GROWTHS).play()
     }
 }
 
@@ -148,17 +147,15 @@ function styleCellContainer(cellContainer, index) {
 
 function setStrengthParameters(cellContainer, index) {
     switch (index) {
-            case 0:
-                cellContainer.textContent = '50';
-                cellContainer.classList.add(PLAYER_COLOR);
-                cellContainer.style.backgroundSize = 'cover';
-                cellContainer.setAttribute('draggable', 'true');
-                break;
-            case (VIRUSES.length - 1):
-                cellContainer.textContent = '50';
-                break;
-            default:
-                // cellContainer.innerHTML = '&nbsp;';
+        case 0:
+            cellContainer.textContent = '50';
+            cellContainer.classList.add(PLAYER_COLOR);
+            cellContainer.style.backgroundSize = 'cover';
+            cellContainer.setAttribute('draggable', 'true');
+            break;
+        case (VIRUSES.length - 1):
+            cellContainer.textContent = '50';
+            break;
         }
 }
 
@@ -270,8 +267,6 @@ function winCondition() {
 function pickRandomFrom(array) {
     return array[Math.floor(Math.random() * array.length)];
 }
-  // pop = POPS[Math.floor(Math.random() * POPS.length)];
-
 
 function Sound(src, maxStreams = 3) {
     this.streamNum = 0;
