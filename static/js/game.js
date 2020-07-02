@@ -68,7 +68,7 @@ function initGame() {
     // generateCells();
     cellArrange();
     selectEnemy();
-    setInterval(insertVirusesOnGameField, 2000);
+    insertVirusesOnGameField();
 }
 
 function cellArrange() {
