@@ -1,5 +1,6 @@
 const options = document.querySelectorAll('.option');
 
+window.addEventListener('click', PlayTheme);
 options.forEach(setEvents);
 
 function setEvents(option){
@@ -16,4 +17,10 @@ function mark(){
         localStorage.setItem("playerColor", color);
     }
     this.setAttribute('class', 'option_clicked');
+}
+
+function PlayTheme() {
+
+    let thisSound=document.getElementById('theme');
+    thisSound.play();
 }

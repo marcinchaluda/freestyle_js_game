@@ -15,6 +15,19 @@ AVATAR_COLORS = ['blue', 'green', 'purple', 'yellow'];
 const PLAYER_COLOR = localStorage.getItem("playerColor"); //Variable with selected color by player
 const GROWTH_RATE = 450; //millisecond growth interval
 let enemyColor;
+//SOUND EFFECTS
+const gameStart = new Sound('static/audio/game_start.mp3');
+const GROWTHS = generateSoundsArray('growth', 4);
+const POPS = generateSoundsArray('pop', 5);
+
+
+function generateSoundsArray(type, howMany) {
+    let pops =[];
+    for(let i = 1; i < howMany + 1; i++) {
+        pops.push(new Sound(`static/audio/${type}${i}.mp3`));
+    }
+    return pops
+}
 const cursor = document.querySelector('.cursor');
 // document.addEventListener('mousemove', moveMouse);
 
@@ -29,6 +42,7 @@ const cellHandlers = {
         document.addEventListener('drag', moveMouse);
         cursor.textContent = (Number(e.target.textContent) * 0.35 | 0).toString();
         console.log('dragstart');
+        pickRandomFrom(POPS).play();
     },
     drag: function (e) {
         moveMouse(e);
@@ -51,6 +65,7 @@ const cellHandlers = {
     },
     drop: function (e) {
         e.preventDefault();
+        pickRandomFrom(GROWTHS).play()
         cursor.style.display='none';
         let draggedElement = document.getElementById(e.dataTransfer.getData('text/elementid'));
         if ((e.target).isSameNode(draggedElement) || draggedElement == null) {
@@ -71,15 +86,15 @@ const cellHandlers = {
                 sourceColor = color;
             }
         });
-        e.target.className = 'cell';
+        e.target.className = 'cell pulse';
         if (sourceColor) e.target.classList.add(sourceColor);
         e.target.setAttribute('draggable', 'true');
         addPlayerListeners(e.target);
-
     }
 }
 
 initGame();
+gameStart.play();
 
 function initGame() {
 
@@ -89,7 +104,7 @@ function initGame() {
     selectEnemy();
     insertVirusesOnGameField();
     setInterval(enemyMove, 3000);
-    setInterval(winCondition, 3000)
+    setInterval(winCondition, 3000);
     animateCursor();
 }
 
@@ -135,6 +150,8 @@ function styleCellContainer(cellContainer, index) {
     cellContainer.classList.add(VIRUSES[index].avatar);
     cellContainer.style.backgroundSize = 'cover';
     cellContainer.classList.add('cell');
+    cellContainer.classList.add('pulse');
+    cellContainer.style.borderRadius = '50%';
     cellContainer.style.left = `${VIRUSES[index].left}px`;
     cellContainer.style.top = `${VIRUSES[index].top}px`;
     cellContainer.style.width = `${CELL_SIZE[Math.floor(Math.random() * CELL_SIZE.length)]}%`;
@@ -144,17 +161,15 @@ function styleCellContainer(cellContainer, index) {
 
 function setStrengthParameters(cellContainer, index) {
     switch (index) {
-            case 0:
-                cellContainer.textContent = '50';
-                cellContainer.classList.add(PLAYER_COLOR);
-                cellContainer.style.backgroundSize = 'cover';
-                cellContainer.setAttribute('draggable', 'true');
-                break;
-            case (VIRUSES.length - 1):
-                cellContainer.textContent = '50';
-                break;
-            default:
-                // cellContainer.innerHTML = '&nbsp;';
+        case 0:
+            cellContainer.textContent = '50';
+            cellContainer.classList.add(PLAYER_COLOR);
+            cellContainer.style.backgroundSize = 'cover';
+            cellContainer.setAttribute('draggable', 'true');
+            break;
+        case (VIRUSES.length - 1):
+            cellContainer.textContent = '50';
+            break;
         }
 }
 
@@ -233,7 +248,7 @@ function fight (sourceCell, targetCell) {
         winner.population = attackers - defenders;
         winner.cell = sourceCell;
         targetCell.className = `cell ${attackersColor}`;
-        targetCell.setAttribute('draggable', 'true');
+        if (attackersColor === PLAYER_COLOR) targetCell.setAttribute('draggable', 'true');
     } else {
         winner.population = defenders - attackers;
         winner.cell = targetCell;
@@ -260,8 +275,25 @@ function winCondition() {
     else if (!loose) {
         // alert('PRZEGRAŁEŚ');
     }
+
 }
 
+function pickRandomFrom(array) {
+    return array[Math.floor(Math.random() * array.length)];
+}
+
+function Sound(src, maxStreams = 3) {
+    this.streamNum = 0;
+    this.streams = [];
+    for (let i = 0; i < maxStreams; i++) {
+        this.streams.push(new Audio(src));
+    }
+    this.play = function() {
+        this.streamNum = (this.streamNum + 1) % maxStreams;
+        this.streams[this.streamNum].play();
+    }
+
+}
 function moveMouse(e) {
     cursor.style.display = 'block';
     const x = e.clientX;
