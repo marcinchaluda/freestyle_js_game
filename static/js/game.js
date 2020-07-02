@@ -13,11 +13,14 @@ RANDOM_MARGIN_ARRAY = [() => Math.floor(Math.random() * 75 | 0),
         () => Math.floor(Math.random() * 100 | 0)];
 AVATAR_COLORS = ['blue', 'green', 'purple', 'yellow'];
 const PLAYER_COLOR = localStorage.getItem("playerColor"); //Variable with selected color by player
+const GROWTH_RATE = 450; //millisecond growth interval
 let enemyColor;
+
 
 const cellHandlers = {
     dragStart: function (e) {
         e.stopPropagation();
+        if (Number(e.target.textContent) < 5) e.preventDefault();
         e.dataTransfer.setData('text/plain', e.target.innerText);
         e.target.id = Date.now().toString();
         e.dataTransfer.setData('text/elementid', e.target.id)
@@ -75,7 +78,8 @@ function initGame() {
     cellArrange();
     selectEnemy();
     insertVirusesOnGameField();
-    setInterval(enemyMove, 1000);
+    setInterval(enemyMove, 3000);
+    setInterval(winCondition, 3000)
 }
 
 function cellArrange() {
@@ -171,7 +175,7 @@ function grow(cell) {
                 cell.textContent = population.toString() : cell.textContent = populationCap;
         }
     }
-    setInterval(breed, 300 + (Math.random() * 300) | 0);
+    setInterval(breed, GROWTH_RATE + (Math.random() * 300) | 0);
 }
 
 function selectEnemy() {
@@ -209,17 +213,18 @@ function getRandomCellGrow() {
 }
 
 function fight (sourceCell, targetCell) {
-    const attackers = Number(sourceCell.textContent);
+    const attackers = Number(sourceCell.textContent) * 0.62 | 0;
     let attackersColor;
     for (let color of AVATAR_COLORS) {
         sourceCell.classList.contains(color) ? attackersColor = color : null;
     }
-    const defenders = Number(sourceCell.textContent);
+    const defenders = Number(targetCell.textContent);
     const winner = {};
     if (attackers > defenders) {
         winner.population = attackers - defenders;
         winner.cell = sourceCell;
         targetCell.className = `cell ${attackersColor}`;
+        if (attackersColor === PLAYER_COLOR) targetCell.setAttribute('draggable', 'true');
     } else {
         winner.population = defenders - attackers;
         winner.cell = targetCell;
@@ -228,11 +233,22 @@ function fight (sourceCell, targetCell) {
     targetCell.textContent = winner.population.toString();
 }
 
-// function winCondition() {
-//     let isWin = 'False';
-//     VIRUSES.forEach(cell => {
-//         if ( cell.avatar != PLAYER_COLOR ){
-//             a
-//         }
-//     })
-// }
+function winCondition() {
+    let loose = false, virus, isEnemy = false;
+    const enemies = document.getElementsByClassName('cell');
+
+    for (virus of enemies) {
+        if (virus.classList.contains(enemyColor)) {
+            isEnemy = true;
+        }
+        else if (virus.classList.contains(PLAYER_COLOR)) {
+            loose = true;
+        }
+    }
+    if (!isEnemy) {
+        // alert('WYGRAŁEŚ!');
+    }
+    else if (!loose) {
+        // alert('PRZEGRAŁEŚ');
+    }
+}
