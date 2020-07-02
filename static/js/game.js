@@ -149,7 +149,7 @@ function addCellListeners(element) {
 
 function addPlayerListeners(element) {
      if (element.classList.contains(PLAYER_COLOR)){
-        element.addEventListener('dragstart', cellHandlers.dragStart);
+        element.addEventListener('dragstart', cellHandlers.dragStart, false);
         element.addEventListener('dragend', cellHandlers.dragEnd);
     }
 }
