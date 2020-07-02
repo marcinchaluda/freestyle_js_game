@@ -94,6 +94,7 @@ const cellHandlers = {
 }
 
 initGame();
+const attack = setInterval(enemyMove, 5000);
 gameStart.play();
 
 function initGame() {
@@ -103,8 +104,6 @@ function initGame() {
     cellArrange();
     selectEnemy();
     insertVirusesOnGameField();
-    setInterval(enemyMove, 3000);
-    setInterval(winCondition, 3000);
     animateCursor();
 }
 
@@ -138,7 +137,7 @@ function insertVirusesOnGameField () {
     for (let i = 0; i < VIRUSES.length; i++) {
         const cellContainer = document.createElement('div');
         styleCellContainer(cellContainer, i);
-        grow(cellContainer);
+        // grow(cellContainer);
         setStrengthParameters(cellContainer, i);
         addCellListeners(cellContainer);
         grow(cellContainer);
@@ -256,12 +255,12 @@ function fight (sourceCell, targetCell) {
     }
     sourceCell.textContent = (Number(sourceCell.textContent) * 0.62 | 0).toString();
     targetCell.textContent = winner.population.toString();
+    setTimeout(winOrLoose, 500);
 }
 
-function winCondition() {
+function winOrLoose() {
     let loose = false, virus, isEnemy = false;
     const enemies = document.getElementsByClassName('cell');
-
     for (virus of enemies) {
         if (virus.classList.contains(enemyColor)) {
             isEnemy = true;
@@ -271,11 +270,26 @@ function winCondition() {
         }
     }
     if (!isEnemy) {
-        // alert('WYGRAŁEŚ!');
+        clearInterval(attack);
+        endScreen('winer');
     }
     else if (!loose) {
-        // alert('PRZEGRAŁEŚ');
+        clearInterval(attack);
+        endScreen('loser');
     }
+}
+
+function endScreen(background) {
+    const info = document.createElement('div');
+    const button = document.createElement('a');
+    let linkText = document.createTextNode("Play again?");
+    button.appendChild(linkText);
+    button.href = '/';
+    document.querySelector('.stats').appendChild(button);
+    info.setAttribute('id','endScreen');
+    info.style.background = `url(static/img/${background}.png)`;
+    info.style.backgroundSize = 'cover';
+    document.querySelector('.game_field').appendChild(info);
 
 }
 
@@ -293,8 +307,8 @@ function Sound(src, maxStreams = 3) {
         this.streamNum = (this.streamNum + 1) % maxStreams;
         this.streams[this.streamNum].play();
     }
-
 }
+
 function moveMouse(e) {
     cursor.style.display = 'block';
     const x = e.clientX;
