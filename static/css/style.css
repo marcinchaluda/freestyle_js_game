@@ -122,7 +122,22 @@ span {
 }
 
 .cursor_bounce {
-    box-shadow: 0 0 0 10px teal;
     width: 18px;
     height: 18px;
+}
+
+.cursor_blue {
+    box-shadow: 0 0 0 10px #00a6e7;
+}
+
+.cursor_green {
+    box-shadow: 0 0 0 10px #98ca5e;
+}
+
+.cursor_purple {
+    box-shadow: 0 0 0 10px #3b3593;
+}
+
+.cursor_yellow {
+    box-shadow: 0 0 0 10px #fdd034;
 }

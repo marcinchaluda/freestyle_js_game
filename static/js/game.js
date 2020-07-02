@@ -30,8 +30,10 @@ const cellHandlers = {
     },
     drag: function (e) {
         moveMouse(e);
+        e.dataTransfer.effectAllowed = 'none';
     },
     dragEnd: function (e) {
+        cursor.style='none';
         console.log('dragend');
     },
     dragEnter : function (e) {
@@ -262,12 +264,13 @@ function moveMouse(e) {
     cursor.style.display = 'block';
     const x = e.clientX;
     const y = e.clientY;
-    cursor.style.transform = `translate(${x + 10}px, ${y + 30}px)`;
+    cursor.style.transform = `translate(${x + 11}px, ${y + 25}px)`;
 }
 
 function animateCursor() {
     setInterval(function () {
-        cursor.classList.toggle('cursor_bounce');
+        cursor.classList.toggle(`cursor_bounce`);
+        cursor.classList.toggle(`cursor_${PLAYER_COLOR}`);
         // requestAnimationFrame(animateCursor);
     }, 300)
 }
