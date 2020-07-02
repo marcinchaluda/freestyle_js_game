@@ -15,6 +15,19 @@ AVATAR_COLORS = ['blue', 'green', 'purple', 'yellow'];
 const PLAYER_COLOR = localStorage.getItem("playerColor"); //Variable with selected color by player
 const GROWTH_RATE = 450; //millisecond growth interval
 let enemyColor;
+//SOUND EFFECTS
+const gameStart = new Sound('static/audio/game_start.mp3'); //TODO refactor to loop
+const growth1 = new Sound('static/audio/growth1.mp3');
+const growth2 = new Sound('static/audio/growth2.mp3');
+const growth3 = new Sound('static/audio/growth3.mp3');
+const growth4 = new Sound('static/audio/growth4.mp3');
+const GROWTHS = [growth1, growth2, growth3, growth4];
+const pop1 = new Sound('static/audio/pop1.mp3');
+const pop2 = new Sound('static/audio/pop2.mp3');
+const pop3 = new Sound('static/audio/pop3.mp3');
+const pop4 = new Sound('static/audio/pop4.mp3');
+const pop5 = new Sound('static/audio/pop4.mp3');
+const POPS = [pop1, pop2, pop3, pop4, pop5];
 
 
 const cellHandlers = {
@@ -25,6 +38,7 @@ const cellHandlers = {
         e.target.id = Date.now().toString();
         e.dataTransfer.setData('text/elementid', e.target.id)
         console.log('dragstart');
+        pickRandomFrom(POPS).play();
     },
     dragEnd: function (e) {
         console.log('dragend');
@@ -65,11 +79,12 @@ const cellHandlers = {
         if (sourceColor) e.target.classList.add(sourceColor);
         e.target.setAttribute('draggable', 'true');
         addPlayerListeners(e.target);
-
+        pickRandomFrom(GROWTHS).play()
     }
 }
 
 initGame();
+gameStart.play();
 
 function initGame() {
 
@@ -79,7 +94,7 @@ function initGame() {
     selectEnemy();
     insertVirusesOnGameField();
     setInterval(enemyMove, 3000);
-    setInterval(winCondition, 3000)
+    setInterval(winCondition, 3000);
 }
 
 function cellArrange() {
@@ -249,4 +264,24 @@ function winCondition() {
     else if (!loose) {
         // alert('PRZEGRAŁEŚ');
     }
+
+}
+
+function pickRandomFrom(array) {
+    return array[Math.floor(Math.random() * array.length)];
+}
+  // pop = POPS[Math.floor(Math.random() * POPS.length)];
+
+
+function Sound(src, maxStreams = 3) {
+    this.streamNum = 0;
+    this.streams = [];
+    for (let i = 0; i < maxStreams; i++) {
+        this.streams.push(new Audio(src));
+    }
+    this.play = function() {
+        this.streamNum = (this.streamNum + 1) % maxStreams;
+        this.streams[this.streamNum].play();
+    }
+
 }
