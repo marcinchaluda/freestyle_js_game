@@ -13,11 +13,13 @@ RANDOM_MARGIN_ARRAY = [() => Math.floor(Math.random() * 75 | 0),
         () => Math.floor(Math.random() * 100 | 0)];
 AVATAR_COLORS = ['blue', 'green', 'purple', 'yellow'];
 const PLAYER_COLOR = localStorage.getItem("playerColor"); //Variable with selected color by player
+const GROWTH_RATE = 450; //millisecond growth interval
 let enemyColor;
 
 const cellHandlers = {
     dragStart: function (e) {
         e.stopPropagation();
+        if (Number(e.target.textContent) < 5) e.preventDefault();
         e.dataTransfer.setData('text/plain', e.target.innerText);
         e.target.id = Date.now().toString();
         e.dataTransfer.setData('text/elementid', e.target.id)
@@ -44,6 +46,10 @@ const cellHandlers = {
             return
         }
         const population = Number(e.dataTransfer.getData('text/plain'));
+        if (!e.target.classList.contains('default')){
+            fight(draggedElement, e.target);
+            return;
+        }
         // add 35% population to target and take 38% from source (lose 3%):
         e.target.textContent = (Number(e.target.textContent) + population * 0.35 | 0).toString();
         draggedElement.textContent = (population * 0.62 | 0).toString();
@@ -154,7 +160,6 @@ function addPlayerListeners(element) {
     }
 }
 
-
 function grow(cell) {
     const breed = function () {
         let population = Number(cell.textContent);
@@ -166,7 +171,7 @@ function grow(cell) {
                 cell.textContent = population.toString() : cell.textContent = populationCap;
         }
     }
-    setInterval(breed, 300 + (Math.random() * 300) | 0);
+    setInterval(breed, GROWTH_RATE + (Math.random() * 300) | 0);
 }
 
 function selectEnemy() {
@@ -180,19 +185,47 @@ function selectEnemy() {
 function enemyMove() {
     const enemies = document.getElementsByClassName('cell');
     const enemy = enemies[Math.floor(Math.random() * enemies.length)];
-    const randomGrowth = getRandomCellGrow();
+    const opponent = getRandomCellGrow();
+    const randomGrowth = opponent[0];
+    const sourceCell = opponent[1];
+    if (enemy.classList.contains(PLAYER_COLOR)){
+        fight(sourceCell, enemy);
+    }
     enemy.classList.add(enemyColor);
+    enemy.classList.remove('default');
     enemy.innerHTML = (randomGrowth * 0.35 | 0).toString();
 }
 
 function getRandomCellGrow() {
+    const sourceCell = []
     const enemies = document.getElementsByClassName(enemyColor);
     const enemy = enemies[Math.floor(Math.random() * enemies.length)];
     const enemyGrowth = enemy.innerHTML;
+    sourceCell.push(enemyGrowth);
+    sourceCell.push(enemy);
     enemy.innerHTML = (enemyGrowth * 0.62 | 0).toString();
-    return enemyGrowth;
+    return sourceCell;
 }
 
+function fight (sourceCell, targetCell) {
+    const attackers = Number(sourceCell.textContent) * 0.62 | 0;
+    let attackersColor;
+    for (let color of AVATAR_COLORS) {
+        sourceCell.classList.contains(color) ? attackersColor = color : null;
+    }
+    const defenders = Number(targetCell.textContent);
+    const winner = {};
+    if (attackers > defenders) {
+        winner.population = attackers - defenders;
+        winner.cell = sourceCell;
+        targetCell.className = `cell ${attackersColor}`;
+    } else {
+        winner.population = defenders - attackers;
+        winner.cell = targetCell;
+    }
+    sourceCell.textContent = (Number(sourceCell.textContent) * 0.62 | 0).toString();
+    targetCell.textContent = winner.population.toString();
+}
 
 // function winCondition() {
 //     let isWin = 'False';
