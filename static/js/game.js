@@ -28,6 +28,8 @@ function generateSoundsArray(type, howMany) {
     }
     return pops
 }
+const cursor = document.querySelector('.cursor');
+// document.addEventListener('mousemove', moveMouse);
 
 const cellHandlers = {
     dragStart: function (e) {
@@ -36,10 +38,18 @@ const cellHandlers = {
         e.dataTransfer.setData('text/plain', e.target.innerText);
         e.target.id = Date.now().toString();
         e.dataTransfer.setData('text/elementid', e.target.id)
+        e.dataTransfer.setDragImage(document.createElement('div'), 0, 0);
+        document.addEventListener('drag', moveMouse);
+        cursor.textContent = (Number(e.target.textContent) * 0.35 | 0).toString();
         console.log('dragstart');
         pickRandomFrom(POPS).play();
     },
+    drag: function (e) {
+        moveMouse(e);
+        e.dataTransfer.effectAllowed = 'none';
+    },
     dragEnd: function (e) {
+        cursor.style='none';
         console.log('dragend');
     },
     dragEnter : function (e) {
@@ -56,6 +66,7 @@ const cellHandlers = {
     drop: function (e) {
         e.preventDefault();
         pickRandomFrom(GROWTHS).play()
+        cursor.style.display='none';
         let draggedElement = document.getElementById(e.dataTransfer.getData('text/elementid'));
         if ((e.target).isSameNode(draggedElement) || draggedElement == null) {
             return
@@ -94,6 +105,7 @@ function initGame() {
     insertVirusesOnGameField();
     setInterval(enemyMove, 3000);
     setInterval(winCondition, 3000);
+    animateCursor();
 }
 
 function cellArrange() {
@@ -282,3 +294,19 @@ function Sound(src, maxStreams = 3) {
     }
 
 }
+function moveMouse(e) {
+    cursor.style.display = 'block';
+    const x = e.clientX;
+    const y = e.clientY;
+    cursor.style.transform = `translate(${x + 11}px, ${y + 25}px)`;
+}
+
+function animateCursor() {
+    setInterval(function () {
+        cursor.classList.add(`cursor_${PLAYER_COLOR}`);
+        cursor.classList.toggle(`cursor_bounce`);
+        cursor.classList.toggle(`cursor_${PLAYER_COLOR}_bounce`);
+        // requestAnimationFrame(animateCursor);
+    }, 600)
+}
+
