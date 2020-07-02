@@ -221,6 +221,7 @@ function enemyMove() {
     enemy.classList.add(enemyColor);
     enemy.classList.remove(PLAYER_COLOR);
     enemy.classList.remove('default');
+    enemy.setAttribute('draggable', 'false');
     enemy.innerHTML = (randomGrowth * 0.35 | 0).toString();
 }
 
