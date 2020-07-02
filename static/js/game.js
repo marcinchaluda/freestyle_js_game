@@ -181,6 +181,7 @@ function enemyMove() {
     const enemies = document.getElementsByClassName('cell');
     const enemy = enemies[Math.floor(Math.random() * enemies.length)];
     const randomGrowth = getRandomCellGrow();
+    enemy.classList.remove(PLAYER_COLOR);
     enemy.classList.add(enemyColor);
     enemy.innerHTML = (randomGrowth * 0.35 | 0).toString();
 }
