@@ -190,6 +190,7 @@ function enemyMove() {
         fight(sourceCell, enemy);
     }
     enemy.classList.add(enemyColor);
+    enemy.classList.remove('default');
     enemy.innerHTML = (randomGrowth * 0.35 | 0).toString();
 }
 
