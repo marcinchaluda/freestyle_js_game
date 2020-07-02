@@ -70,6 +70,7 @@ function initGame() {
     cellArrange();
     selectEnemy();
     insertVirusesOnGameField();
+    setInterval(winCondition, 2000)
 }
 
 function cellArrange() {
@@ -182,11 +183,16 @@ function enemyMove() {
 }
 
 
-// function winCondition() {
-//     let isWin = 'False';
-//     VIRUSES.forEach(cell => {
-//         if ( cell.avatar != PLAYER_COLOR ){
-//             a
-//         }
-//     })
-// }
+function winCondition() {
+    let virus, isEnemy = false;
+    for (virus of VIRUSES) {
+        console.log('--');
+        console.log(virus.avatar);
+        if (virus.avatar === enemyColor) {
+            isEnemy = true;
+        }
+    }
+    if (!isEnemy) {
+        alert('WYGRAŁEŚ!');
+    }
+}
