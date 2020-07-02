@@ -15,7 +15,9 @@ AVATAR_COLORS = ['blue', 'green', 'purple', 'yellow'];
 const PLAYER_COLOR = localStorage.getItem("playerColor"); //Variable with selected color by player
 const GROWTH_RATE = 450; //millisecond growth interval
 let enemyColor;
-
+const cursor = document.querySelector('.cursor');
+document.addEventListener('mousemove', moveMouse);
+document.addEventListener('drag', moveMouse);
 
 const cellHandlers = {
     dragStart: function (e) {
@@ -26,6 +28,9 @@ const cellHandlers = {
         e.dataTransfer.setData('text/elementid', e.target.id)
         console.log('dragstart');
     },
+    drag: function (e) {
+        moveMouse(e);
+    },
     dragEnd: function (e) {
         console.log('dragend');
     },
@@ -35,6 +40,7 @@ const cellHandlers = {
     },
     dragOver: function (e) {
         e.preventDefault();
+        // moveMouse(e);
         console.log('dragover');
     },
     dragLeave: function (e) {
@@ -80,6 +86,7 @@ function initGame() {
     insertVirusesOnGameField();
     setInterval(enemyMove, 3000);
     setInterval(winCondition, 3000)
+    animateCursor();
 }
 
 function cellArrange() {
@@ -250,3 +257,17 @@ function winCondition() {
         // alert('PRZEGRAŁEŚ');
     }
 }
+
+function moveMouse(e) {
+    const x = e.clientX;
+    const y = e.clientY;
+    cursor.style.transform = `translate(${x + 10}px, ${y + 30}px)`;
+}
+
+function animateCursor() {
+    setInterval(function () {
+        cursor.classList.toggle('cursor_bounce');
+        // requestAnimationFrame(animateCursor);
+    }, 300)
+}
+
