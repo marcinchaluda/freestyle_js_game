@@ -15,7 +15,19 @@ AVATAR_COLORS = ['blue', 'green', 'purple', 'yellow'];
 const PLAYER_COLOR = localStorage.getItem("playerColor"); //Variable with selected color by player
 const GROWTH_RATE = 450; //millisecond growth interval
 let enemyColor;
+//SOUND EFFECTS
+const gameStart = new Sound('static/audio/game_start.mp3');
+const GROWTHS = generateSoundsArray('growth', 4);
+const POPS = generateSoundsArray('pop', 5);
 
+
+function generateSoundsArray(type, howMany) {
+    let pops =[];
+    for(let i = 1; i < howMany + 1; i++) {
+        pops.push(new Sound(`static/audio/${type}${i}.mp3`));
+    }
+    return pops
+}
 
 const cellHandlers = {
     dragStart: function (e) {
@@ -25,6 +37,7 @@ const cellHandlers = {
         e.target.id = Date.now().toString();
         e.dataTransfer.setData('text/elementid', e.target.id)
         console.log('dragstart');
+        pickRandomFrom(POPS).play();
     },
     dragEnd: function (e) {
         console.log('dragend');
@@ -42,6 +55,7 @@ const cellHandlers = {
     },
     drop: function (e) {
         e.preventDefault();
+        pickRandomFrom(GROWTHS).play()
         let draggedElement = document.getElementById(e.dataTransfer.getData('text/elementid'));
         if ((e.target).isSameNode(draggedElement) || draggedElement == null) {
             return
@@ -65,11 +79,11 @@ const cellHandlers = {
         if (sourceColor) e.target.classList.add(sourceColor);
         e.target.setAttribute('draggable', 'true');
         addPlayerListeners(e.target);
-
     }
 }
 
 initGame();
+gameStart.play();
 
 function initGame() {
 
@@ -79,7 +93,7 @@ function initGame() {
     selectEnemy();
     insertVirusesOnGameField();
     setInterval(enemyMove, 3000);
-    setInterval(winCondition, 3000)
+    setInterval(winCondition, 3000);
 }
 
 function cellArrange() {
@@ -133,17 +147,15 @@ function styleCellContainer(cellContainer, index) {
 
 function setStrengthParameters(cellContainer, index) {
     switch (index) {
-            case 0:
-                cellContainer.textContent = '50';
-                cellContainer.classList.add(PLAYER_COLOR);
-                cellContainer.style.backgroundSize = 'cover';
-                cellContainer.setAttribute('draggable', 'true');
-                break;
-            case (VIRUSES.length - 1):
-                cellContainer.textContent = '50';
-                break;
-            default:
-                // cellContainer.innerHTML = '&nbsp;';
+        case 0:
+            cellContainer.textContent = '50';
+            cellContainer.classList.add(PLAYER_COLOR);
+            cellContainer.style.backgroundSize = 'cover';
+            cellContainer.setAttribute('draggable', 'true');
+            break;
+        case (VIRUSES.length - 1):
+            cellContainer.textContent = '50';
+            break;
         }
 }
 
@@ -249,4 +261,22 @@ function winCondition() {
     else if (!loose) {
         // alert('PRZEGRAŁEŚ');
     }
+
+}
+
+function pickRandomFrom(array) {
+    return array[Math.floor(Math.random() * array.length)];
+}
+
+function Sound(src, maxStreams = 3) {
+    this.streamNum = 0;
+    this.streams = [];
+    for (let i = 0; i < maxStreams; i++) {
+        this.streams.push(new Audio(src));
+    }
+    this.play = function() {
+        this.streamNum = (this.streamNum + 1) % maxStreams;
+        this.streams[this.streamNum].play();
+    }
+
 }
