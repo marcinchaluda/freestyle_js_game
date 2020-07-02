@@ -1,4 +1,4 @@
-CELL_SIZE = [7, 10, 11, 12];
+CELL_SIZE = [6, 7, 11, 13];
 NUMBER_OF_CELLS = 12;
 const VIRUSES = [];
 FIELD_WIDTH = 768;
@@ -69,6 +69,7 @@ function initGame() {
     cellArrange();
     selectEnemy();
     insertVirusesOnGameField();
+    setInterval(enemyMove, 1000);
 }
 
 function cellArrange() {
@@ -169,6 +170,7 @@ function selectEnemy() {
 }
 
 function enemyMove() {
-    const enemy = VIRUSES[Math.floor(Math.random() * VIRUSES.length)];
-    enemy.avatar = enemyColor;
+    const enemies = document.getElementsByClassName('cell');
+    const enemy = enemies[Math.floor(Math.random() * enemies.length)];
+    enemy.classList.add(enemyColor);
 }
