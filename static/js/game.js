@@ -16,6 +16,7 @@ const PLAYER_COLOR = localStorage.getItem("playerColor"); //Variable with select
 const GROWTH_RATE = 450; //millisecond growth interval
 let enemyColor;
 
+
 const cellHandlers = {
     dragStart: function (e) {
         e.stopPropagation();
@@ -77,7 +78,8 @@ function initGame() {
     cellArrange();
     selectEnemy();
     insertVirusesOnGameField();
-    setInterval(enemyMove, 1000);
+    setInterval(enemyMove, 3000);
+    setInterval(winCondition, 3000)
 }
 
 function cellArrange() {
@@ -227,11 +229,22 @@ function fight (sourceCell, targetCell) {
     targetCell.textContent = winner.population.toString();
 }
 
-// function winCondition() {
-//     let isWin = 'False';
-//     VIRUSES.forEach(cell => {
-//         if ( cell.avatar != PLAYER_COLOR ){
-//             a
-//         }
-//     })
-// }
+function winCondition() {
+    let loose = false, virus, isEnemy = false;
+    const enemies = document.getElementsByClassName('cell');
+
+    for (virus of enemies) {
+        if (virus.classList.contains(enemyColor)) {
+            isEnemy = true;
+        }
+        else if (virus.classList.contains(PLAYER_COLOR)) {
+            loose = true;
+        }
+    }
+    if (!isEnemy) {
+        alert('WYGRAŁEŚ!');
+    }
+    else if (!loose) {
+        alert('PRZEGRAŁEŚ');
+    }
+}
