@@ -44,6 +44,10 @@ const cellHandlers = {
             return
         }
         const population = Number(e.dataTransfer.getData('text/plain'));
+        if (!e.target.classList.contains('default')){
+            fight(draggedElement, e.target);
+            return;
+        }
         // add 35% population to target and take 38% from source (lose 3%):
         e.target.textContent = (Number(e.target.textContent) + population * 0.35 | 0).toString();
         draggedElement.textContent = (population * 0.62 | 0).toString();
@@ -179,17 +183,25 @@ function selectEnemy() {
 function enemyMove() {
     const enemies = document.getElementsByClassName('cell');
     const enemy = enemies[Math.floor(Math.random() * enemies.length)];
-    const randomGrowth = getRandomCellGrow();
+    const opponent = getRandomCellGrow();
+    const randomGrowth = opponent[0];
+    const sourceCell = opponent[1];
+    if (enemy.classList.contains(PLAYER_COLOR)){
+        fight(sourceCell, enemy);
+    }
     enemy.classList.add(enemyColor);
     enemy.innerHTML = (randomGrowth * 0.35 | 0).toString();
 }
 
 function getRandomCellGrow() {
+    const sourceCell = []
     const enemies = document.getElementsByClassName(enemyColor);
     const enemy = enemies[Math.floor(Math.random() * enemies.length)];
     const enemyGrowth = enemy.innerHTML;
+    sourceCell.push(enemyGrowth);
+    sourceCell.push(enemy);
     enemy.innerHTML = (enemyGrowth * 0.62 | 0).toString();
-    return enemyGrowth;
+    return sourceCell;
 }
 
 function fight (sourceCell, targetCell) {
