@@ -114,30 +114,71 @@ span {
     left: 0;
     border-radius: 100%;
     background: white;
+    font-size: 1em;
+    font-weight: bolder;
     width: 18px;
     height: 18px;
-    box-shadow: 0 0 0 15px white;
-    transition: height .3s ease-in, width .3s ease-in, box-shadow .3s ease-in;
+    transition: box-shadow .6s ease-in-out, width .6s ease-in-out, height .6s ease-in-out,
+                font-size .6s ease-in-out, background .6s ease-in-out, color .6s ease-in-out;
     display: none;
-}
-
-.cursor_bounce {
-    width: 18px;
-    height: 18px;
+    text-align: center;
+    padding: 7px;
 }
 
 .cursor_blue {
-    box-shadow: 0 0 0 10px #00a6e7;
+    color: #00a6e7;
+    box-shadow: 0 0 0 20px #00a6e7;
 }
 
 .cursor_green {
-    box-shadow: 0 0 0 10px #98ca5e;
+    color: #98ca5e;
+    box-shadow: 0 0 0 20px #98ca5e;
 }
 
 .cursor_purple {
-    box-shadow: 0 0 0 10px #3b3593;
+    color: #3b3593;
+    box-shadow: 0 0 0 20px #3b3593;
 }
 
 .cursor_yellow {
-    box-shadow: 0 0 0 10px #fdd034;
+    color: #fdd034;
+    box-shadow: 0 0 0 20px #fdd034;
+}
+
+.cursor_bounce {
+    width: 30px;
+    height: 30px;
+    text-align: justify;
+}
+
+.cursor_blue_bounce {
+    box-shadow: 0 0 0 10px white;
+    background: #00a6e7;
+    color: white;
+    font-size: 1.75em;
+    text-align: center;
+}
+
+.cursor_green_bounce {
+    box-shadow: 0 0 0 10px white;
+    background: #98ca5e;
+    color: white;
+    font-size: 1.75em;
+    text-align: center;
+}
+
+.cursor_purple_bounce {
+    box-shadow: 0 0 0 10px white;
+    background: #3b3593;
+    color: white;
+    font-size: 1.75em;
+    text-align: center;
+}
+
+.cursor_yellow_bounce {
+    box-shadow: 0 0 0 10px white;
+    background: #fdd034;
+    color: white;
+    font-size: 1.75em;
+    text-align: center;
 }

@@ -16,6 +16,7 @@ const PLAYER_COLOR = localStorage.getItem("playerColor"); //Variable with select
 const GROWTH_RATE = 450; //millisecond growth interval
 let enemyColor;
 const cursor = document.querySelector('.cursor');
+// document.addEventListener('mousemove', moveMouse);
 
 const cellHandlers = {
     dragStart: function (e) {
@@ -26,6 +27,7 @@ const cellHandlers = {
         e.dataTransfer.setData('text/elementid', e.target.id)
         e.dataTransfer.setDragImage(document.createElement('div'), 0, 0);
         document.addEventListener('drag', moveMouse);
+        cursor.textContent = (Number(e.target.textContent) * 0.35 | 0).toString();
         console.log('dragstart');
     },
     drag: function (e) {
@@ -269,9 +271,10 @@ function moveMouse(e) {
 
 function animateCursor() {
     setInterval(function () {
+        cursor.classList.add(`cursor_${PLAYER_COLOR}`);
         cursor.classList.toggle(`cursor_bounce`);
-        cursor.classList.toggle(`cursor_${PLAYER_COLOR}`);
+        cursor.classList.toggle(`cursor_${PLAYER_COLOR}_bounce`);
         // requestAnimationFrame(animateCursor);
-    }, 300)
+    }, 600)
 }
 
