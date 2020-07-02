@@ -17,10 +17,10 @@ let enemyColor;
 
 const cellHandlers = {
     dragStart: function (e) {
+        e.stopPropagation();
         e.dataTransfer.setData('text/plain', e.target.innerText);
         e.target.id = Date.now().toString();
         e.dataTransfer.setData('text/elementid', e.target.id)
-        console.log('dragstart');
     },
     dragEnd: function (e) {
         console.log('dragend');
@@ -39,24 +39,25 @@ const cellHandlers = {
     drop: function (e) {
         e.preventDefault();
         let draggedElement = document.getElementById(e.dataTransfer.getData('text/elementid'));
-        if (!(e.target).isSameNode(draggedElement)) {
-            const population = Number(e.dataTransfer.getData('text/plain'));
-            // add 35% population to target and take 38% from source (lose 3%):
-            e.target.textContent = (Number(e.target.textContent) + population * 0.35 | 0).toString();
-            draggedElement.textContent = (population * 0.62 | 0).toString();
-            // set infected cell color
-            let sourceColor;
-            AVATAR_COLORS.forEach(color => {
-                if (draggedElement.classList.contains(color)){
-                    sourceColor = color;
-                }
-            });
-            e.target.className = 'cell';
-            e.target.classList.add(sourceColor);
-            e.target.setAttribute('draggable', 'true');
-            console.log()
-            console.log('drop');
+        if ((e.target).isSameNode(draggedElement) || draggedElement == null) {
+            return
         }
+        const population = Number(e.dataTransfer.getData('text/plain'));
+        // add 35% population to target and take 38% from source (lose 3%):
+        e.target.textContent = (Number(e.target.textContent) + population * 0.35 | 0).toString();
+        draggedElement.textContent = (population * 0.62 | 0).toString();
+        // set infected cell color
+        let sourceColor;
+        AVATAR_COLORS.forEach(color => {
+            if (draggedElement.classList.contains(color)){
+                sourceColor = color;
+            }
+        });
+        e.target.className = 'cell';
+        e.target.classList.add(sourceColor);
+        e.target.setAttribute('draggable', 'true');
+        addPlayerListeners(e.target);
+
     }
 }
 
@@ -130,7 +131,7 @@ function setStrengthParameters(cellContainer, index) {
                 break;
             case (VIRUSES.length - 1):
                 cellContainer.textContent = '50';
-                cellContainer.setAttribute('draggable', 'true');
+                cellContainer.setAttribute('draggable', 'false');
                 break;
             default:
                 // cellContainer.innerHTML = '&nbsp;';
@@ -138,13 +139,20 @@ function setStrengthParameters(cellContainer, index) {
 }
 
 function addCellListeners(element) {
-    element.addEventListener('dragstart', cellHandlers.dragStart);
-    element.addEventListener('dragend', cellHandlers.dragEnd);
+    element.addEventListener('drop', cellHandlers.drop);
     element.addEventListener('dragenter', cellHandlers.dragEnter);
     element.addEventListener('dragover', cellHandlers.dragOver);
     element.addEventListener('dragleave', cellHandlers.dragLeave );
-    element.addEventListener('drop', cellHandlers.drop);
+    addPlayerListeners(element);
 }
+
+function addPlayerListeners(element) {
+     if (element.classList.contains(PLAYER_COLOR)){
+        element.addEventListener('dragstart', cellHandlers.dragStart);
+        element.addEventListener('dragend', cellHandlers.dragEnd);
+    }
+}
+
 
 function grow(cell) {
     const breed = function () {
@@ -172,3 +180,13 @@ function enemyMove() {
     const enemy = VIRUSES[Math.floor(Math.random() * VIRUSES.length)];
     enemy.avatar = enemyColor;
 }
+
+
+// function winCondition() {
+//     let isWin = 'False';
+//     VIRUSES.forEach(cell => {
+//         if ( cell.avatar != PLAYER_COLOR ){
+//             a
+//         }
+//     })
+// }
