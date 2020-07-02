@@ -16,10 +16,10 @@ const PLAYER_COLOR = localStorage.getItem("playerColor"); //Variable with select
 
 const cellHandlers = {
     dragStart: function (e) {
+        e.stopPropagation();
         e.dataTransfer.setData('text/plain', e.target.innerText);
         e.target.id = Date.now().toString();
         e.dataTransfer.setData('text/elementid', e.target.id)
-        console.log('dragstart');
     },
     dragEnd: function (e) {
         console.log('dragend');
@@ -30,7 +30,7 @@ const cellHandlers = {
     },
     dragOver: function (e) {
         e.preventDefault();
-        console.log('dragover');
+        // console.log('dragover');
     },
     dragLeave: function (e) {
         console.log('dragleave');
@@ -38,24 +38,25 @@ const cellHandlers = {
     drop: function (e) {
         e.preventDefault();
         let draggedElement = document.getElementById(e.dataTransfer.getData('text/elementid'));
-        if (!(e.target).isSameNode(draggedElement)) {
-            const population = Number(e.dataTransfer.getData('text/plain'));
-            // add 35% population to target and take 38% from source (lose 3%):
-            e.target.textContent = (Number(e.target.textContent) + population * 0.35 | 0).toString();
-            draggedElement.textContent = (population * 0.62 | 0).toString();
-            // set infected cell color
-            let sourceColor;
-            AVATAR_COLORS.forEach(color => {
-                if (draggedElement.classList.contains(color)){
-                    sourceColor = color;
-                }
-            });
-            e.target.className = 'cell';
-            e.target.classList.add(sourceColor);
-            e.target.setAttribute('draggable', 'true');
-            console.log()
-            console.log('drop');
+        if ((e.target).isSameNode(draggedElement) || draggedElement == null) {
+            return
         }
+        const population = Number(e.dataTransfer.getData('text/plain'));
+        // add 35% population to target and take 38% from source (lose 3%):
+        e.target.textContent = (Number(e.target.textContent) + population * 0.35 | 0).toString();
+        draggedElement.textContent = (population * 0.62 | 0).toString();
+        // set infected cell color
+        let sourceColor;
+        AVATAR_COLORS.forEach(color => {
+            if (draggedElement.classList.contains(color)){
+                sourceColor = color;
+            }
+        });
+        e.target.className = 'cell';
+        e.target.classList.add(sourceColor);
+        e.target.setAttribute('draggable', 'true');
+        addPlayerListeners(e.target);
+
     }
 }
 
@@ -107,7 +108,6 @@ function insertVirusesOnGameField () {
         cellContainer.style.width = `${CELL_SIZE[Math.floor(Math.random() * CELL_SIZE.length)]}%`;
         cellContainer.style.height = Number(cellContainer.style.width.replace('%', ''))
             * FIELD_RATIO + '%';
-        addCellListeners(cellContainer);
         // Add test content to the first cell
         grow(cellContainer);
         switch (i){
@@ -116,6 +116,7 @@ function insertVirusesOnGameField () {
                 cellContainer.classList.add(PLAYER_COLOR);
                 cellContainer.style.backgroundSize = 'cover';
                 cellContainer.setAttribute('draggable', 'true');
+
                 break;
             case (VIRUSES.length - 1):
                 cellContainer.textContent = '50';
@@ -124,28 +125,33 @@ function insertVirusesOnGameField () {
             default:
                 // cellContainer.innerHTML = '&nbsp;';
         }
+        addCellListeners(cellContainer);
         document.querySelector('.game_field').appendChild(cellContainer);
     }
 
 }
 
 function addCellListeners(element) {
-    element.addEventListener('dragstart', cellHandlers.dragStart);
-    element.addEventListener('dragend', cellHandlers.dragEnd);
+    element.addEventListener('drop', cellHandlers.drop);
     element.addEventListener('dragenter', cellHandlers.dragEnter);
     element.addEventListener('dragover', cellHandlers.dragOver);
     element.addEventListener('dragleave', cellHandlers.dragLeave );
-    element.addEventListener('drop', cellHandlers.drop);
+    addPlayerListeners(element);
 }
+
+function addPlayerListeners(element) {
+     if (element.classList.contains(PLAYER_COLOR)){
+        element.addEventListener('dragstart', cellHandlers.dragStart);
+        element.addEventListener('dragend', cellHandlers.dragEnd);
+    }
+}
+
 
 function grow(cell) {
     const breed = function () {
         let population = Number(cell.textContent);
         const populationCap = Number(cell.style.width.replace('%', '')) * 10 | 0;
         if (population > 0) {
-            // let color = cell.avatar == PLAYER_COLOR ? PLAYER_COLOR : cell.avatar;
-            // cell.style.background = `url('static/img/virus_${color}.png')`; //add color when infected
-            // cell.style.backgroundSize = 'cover';
             let brood = (population * (Math.random() * 3 + 3 | 0) * 0.01) | 0; // generates integer 3-5% population
             population += (brood > 0) ? brood : 1;
             (cell.textContent <= populationCap) ?
@@ -163,3 +169,13 @@ function selectEnemy() {
     }
     enemy.avatar = enemyColor;
 }
+
+
+// function winCondition() {
+//     let isWin = 'False';
+//     VIRUSES.forEach(cell => {
+//         if ( cell.avatar != PLAYER_COLOR ){
+//             a
+//         }
+//     })
+// }
