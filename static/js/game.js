@@ -120,6 +120,8 @@ function styleCellContainer(cellContainer, index) {
     cellContainer.classList.add(VIRUSES[index].avatar);
     cellContainer.style.backgroundSize = 'cover';
     cellContainer.classList.add('cell');
+    cellContainer.classList.add('pulse');
+    cellContainer.style.borderRadius = '50%';
     cellContainer.style.left = `${VIRUSES[index].left}px`;
     cellContainer.style.top = `${VIRUSES[index].top}px`;
     cellContainer.style.width = `${CELL_SIZE[Math.floor(Math.random() * CELL_SIZE.length)]}%`;
@@ -190,6 +192,7 @@ function enemyMove() {
         fight(sourceCell, enemy);
     }
     enemy.classList.add(enemyColor);
+    enemy.classList.remove(PLAYER_COLOR);
     enemy.classList.remove('default');
     enemy.innerHTML = (randomGrowth * 0.35 | 0).toString();
 }
