@@ -75,7 +75,7 @@ const cellHandlers = {
                 sourceColor = color;
             }
         });
-        e.target.className = 'cell';
+        e.target.className = 'cell pulse';
         if (sourceColor) e.target.classList.add(sourceColor);
         e.target.setAttribute('draggable', 'true');
         addPlayerListeners(e.target);
@@ -138,6 +138,8 @@ function styleCellContainer(cellContainer, index) {
     cellContainer.classList.add(VIRUSES[index].avatar);
     cellContainer.style.backgroundSize = 'cover';
     cellContainer.classList.add('cell');
+    cellContainer.classList.add('pulse');
+    cellContainer.style.borderRadius = '50%';
     cellContainer.style.left = `${VIRUSES[index].left}px`;
     cellContainer.style.top = `${VIRUSES[index].top}px`;
     cellContainer.style.width = `${CELL_SIZE[Math.floor(Math.random() * CELL_SIZE.length)]}%`;
