@@ -13,6 +13,7 @@ RANDOM_MARGIN_ARRAY = [() => Math.floor(Math.random() * 75 | 0),
         () => Math.floor(Math.random() * 100 | 0)];
 AVATAR_COLORS = ['blue', 'green', 'purple', 'yellow'];
 const PLAYER_COLOR = localStorage.getItem("playerColor"); //Variable with selected color by player
+let enemyColor;
 
 const cellHandlers = {
     dragStart: function (e) {
@@ -30,7 +31,7 @@ const cellHandlers = {
     },
     dragOver: function (e) {
         e.preventDefault();
-        // console.log('dragover');
+        console.log('dragover');
     },
     dragLeave: function (e) {
         console.log('dragleave');
@@ -72,7 +73,7 @@ function initGame() {
 }
 
 function cellArrange() {
-    let x = START_POSITION, y=START_POSITION;
+    let x = START_POSITION, y = START_POSITION;
 
     for (let i=0; i < 5; i++) {
         y = START_POSITION;
@@ -100,35 +101,41 @@ function offsetPosition() {
 function insertVirusesOnGameField () {
     for (let i = 0; i < VIRUSES.length; i++) {
         const cellContainer = document.createElement('div');
-        cellContainer.classList.add(VIRUSES[i].avatar);
-        cellContainer.style.backgroundSize = 'cover';
-        cellContainer.classList.add('cell');
-        cellContainer.style.left = `${VIRUSES[i].left}px`;
-        cellContainer.style.top = `${VIRUSES[i].top}px`;
-        cellContainer.style.width = `${CELL_SIZE[Math.floor(Math.random() * CELL_SIZE.length)]}%`;
-        cellContainer.style.height = Number(cellContainer.style.width.replace('%', ''))
-            * FIELD_RATIO + '%';
-        // Add test content to the first cell
+        styleCellContainer(cellContainer, i);
         grow(cellContainer);
-        switch (i){
+        setStrengthParameters(cellContainer, i);
+        addCellListeners(cellContainer);
+        grow(cellContainer);
+        document.querySelector('.game_field').appendChild(cellContainer);
+    }
+}
+
+function styleCellContainer(cellContainer, index) {
+    cellContainer.classList.add(VIRUSES[index].avatar);
+    cellContainer.style.backgroundSize = 'cover';
+    cellContainer.classList.add('cell');
+    cellContainer.style.left = `${VIRUSES[index].left}px`;
+    cellContainer.style.top = `${VIRUSES[index].top}px`;
+    cellContainer.style.width = `${CELL_SIZE[Math.floor(Math.random() * CELL_SIZE.length)]}%`;
+    cellContainer.style.height = Number(cellContainer.style.width.replace('%', ''))
+        * FIELD_RATIO + '%';
+}
+
+function setStrengthParameters(cellContainer, index) {
+    switch (index) {
             case 0:
                 cellContainer.textContent = '50';
                 cellContainer.classList.add(PLAYER_COLOR);
                 cellContainer.style.backgroundSize = 'cover';
                 cellContainer.setAttribute('draggable', 'true');
-
                 break;
             case (VIRUSES.length - 1):
                 cellContainer.textContent = '50';
-                cellContainer.setAttribute('draggable', 'true');
+                cellContainer.setAttribute('draggable', 'false');
                 break;
             default:
                 // cellContainer.innerHTML = '&nbsp;';
         }
-        addCellListeners(cellContainer);
-        document.querySelector('.game_field').appendChild(cellContainer);
-    }
-
 }
 
 function addCellListeners(element) {
@@ -163,10 +170,14 @@ function grow(cell) {
 
 function selectEnemy() {
     const enemy = VIRUSES[VIRUSES.length-1];
-    let enemyColor = PLAYER_COLOR;
-    while (enemyColor === PLAYER_COLOR) {
+    do {
         enemyColor = AVATAR_COLORS[Math.floor(Math.random() * AVATAR_COLORS.length)];
-    }
+    } while (enemyColor === PLAYER_COLOR);
+    enemy.avatar = enemyColor;
+}
+
+function enemyMove() {
+    const enemy = VIRUSES[Math.floor(Math.random() * VIRUSES.length)];
     enemy.avatar = enemyColor;
 }
 
