@@ -16,8 +16,6 @@ const PLAYER_COLOR = localStorage.getItem("playerColor"); //Variable with select
 const GROWTH_RATE = 450; //millisecond growth interval
 let enemyColor;
 const cursor = document.querySelector('.cursor');
-document.addEventListener('mousemove', moveMouse);
-document.addEventListener('drag', moveMouse);
 
 const cellHandlers = {
     dragStart: function (e) {
@@ -26,6 +24,8 @@ const cellHandlers = {
         e.dataTransfer.setData('text/plain', e.target.innerText);
         e.target.id = Date.now().toString();
         e.dataTransfer.setData('text/elementid', e.target.id)
+        e.dataTransfer.setDragImage(document.createElement('div'), 0, 0);
+        document.addEventListener('drag', moveMouse);
         console.log('dragstart');
     },
     drag: function (e) {
@@ -40,7 +40,6 @@ const cellHandlers = {
     },
     dragOver: function (e) {
         e.preventDefault();
-        // moveMouse(e);
         console.log('dragover');
     },
     dragLeave: function (e) {
@@ -48,6 +47,7 @@ const cellHandlers = {
     },
     drop: function (e) {
         e.preventDefault();
+        cursor.style.display='none';
         let draggedElement = document.getElementById(e.dataTransfer.getData('text/elementid'));
         if ((e.target).isSameNode(draggedElement) || draggedElement == null) {
             return
@@ -259,6 +259,7 @@ function winCondition() {
 }
 
 function moveMouse(e) {
+    cursor.style.display = 'block';
     const x = e.clientX;
     const y = e.clientY;
     cursor.style.transform = `translate(${x + 10}px, ${y + 30}px)`;

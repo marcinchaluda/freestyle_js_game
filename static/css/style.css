@@ -118,6 +118,7 @@ span {
     height: 18px;
     box-shadow: 0 0 0 15px white;
     transition: height .3s ease-in, width .3s ease-in, box-shadow .3s ease-in;
+    display: none;
 }
 
 .cursor_bounce {
