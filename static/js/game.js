@@ -194,6 +194,7 @@ function enemyMove() {
         fight(sourceCell, enemy);
     }
     enemy.classList.add(enemyColor);
+    enemy.classList.remove(PLAYER_COLOR);
     enemy.classList.remove('default');
     enemy.innerHTML = (randomGrowth * 0.35 | 0).toString();
 }
@@ -243,9 +244,9 @@ function winCondition() {
         }
     }
     if (!isEnemy) {
-        alert('WYGRAŁEŚ!');
+        // alert('WYGRAŁEŚ!');
     }
     else if (!loose) {
-        alert('PRZEGRAŁEŚ');
+        // alert('PRZEGRAŁEŚ');
     }
 }
