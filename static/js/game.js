@@ -154,7 +154,6 @@ function addPlayerListeners(element) {
     }
 }
 
-
 function grow(cell) {
     const breed = function () {
         let population = Number(cell.textContent);
@@ -193,6 +192,25 @@ function getRandomCellGrow() {
     return enemyGrowth;
 }
 
+function fight (sourceCell, targetCell) {
+    const attackers = Number(sourceCell.textContent);
+    let attackersColor;
+    for (let color of AVATAR_COLORS) {
+        sourceCell.classList.contains(color) ? attackersColor = color : null;
+    }
+    const defenders = Number(sourceCell.textContent);
+    const winner = {};
+    if (attackers > defenders) {
+        winner.population = attackers - defenders;
+        winner.cell = sourceCell;
+        targetCell.className = `cell ${attackersColor}`;
+    } else {
+        winner.population = defenders - attackers;
+        winner.cell = targetCell;
+    }
+    sourceCell.textContent = (Number(sourceCell.textContent) * 0.62 | 0).toString();
+    targetCell.textContent = winner.population.toString();
+}
 
 // function winCondition() {
 //     let isWin = 'False';
