@@ -221,6 +221,7 @@ function fight (sourceCell, targetCell) {
         winner.population = attackers - defenders;
         winner.cell = sourceCell;
         targetCell.className = `cell ${attackersColor}`;
+        targetCell.setAttribute('draggable', 'true');
     } else {
         winner.population = defenders - attackers;
         winner.cell = targetCell;
