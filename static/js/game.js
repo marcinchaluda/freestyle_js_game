@@ -1,4 +1,4 @@
-CELL_SIZE = [7, 10, 11, 12];
+CELL_SIZE = [6, 7, 11, 13];
 NUMBER_OF_CELLS = 12;
 const VIRUSES = [];
 FIELD_WIDTH = 768;
@@ -15,12 +15,14 @@ AVATAR_COLORS = ['blue', 'green', 'purple', 'yellow'];
 const PLAYER_COLOR = localStorage.getItem("playerColor"); //Variable with selected color by player
 let enemyColor;
 
+
 const cellHandlers = {
     dragStart: function (e) {
         e.stopPropagation();
         e.dataTransfer.setData('text/plain', e.target.innerText);
         e.target.id = Date.now().toString();
         e.dataTransfer.setData('text/elementid', e.target.id)
+        console.log('dragstart');
     },
     dragEnd: function (e) {
         console.log('dragend');
@@ -54,7 +56,7 @@ const cellHandlers = {
             }
         });
         e.target.className = 'cell';
-        e.target.classList.add(sourceColor);
+        if (sourceColor) e.target.classList.add(sourceColor);
         e.target.setAttribute('draggable', 'true');
         addPlayerListeners(e.target);
 
@@ -70,7 +72,8 @@ function initGame() {
     cellArrange();
     selectEnemy();
     insertVirusesOnGameField();
-    setInterval(winCondition, 2000)
+    setInterval(enemyMove, 3000);
+    setInterval(winCondition, 3000)
 }
 
 function cellArrange() {
@@ -132,7 +135,6 @@ function setStrengthParameters(cellContainer, index) {
                 break;
             case (VIRUSES.length - 1):
                 cellContainer.textContent = '50';
-                cellContainer.setAttribute('draggable', 'false');
                 break;
             default:
                 // cellContainer.innerHTML = '&nbsp;';
@@ -149,7 +151,7 @@ function addCellListeners(element) {
 
 function addPlayerListeners(element) {
      if (element.classList.contains(PLAYER_COLOR)){
-        element.addEventListener('dragstart', cellHandlers.dragStart);
+        element.addEventListener('dragstart', cellHandlers.dragStart, false);
         element.addEventListener('dragend', cellHandlers.dragEnd);
     }
 }
@@ -178,21 +180,38 @@ function selectEnemy() {
 }
 
 function enemyMove() {
-    const enemy = VIRUSES[Math.floor(Math.random() * VIRUSES.length)];
-    enemy.avatar = enemyColor;
+    const enemies = document.getElementsByClassName('cell');
+    const enemy = enemies[Math.floor(Math.random() * enemies.length)];
+    const randomGrowth = getRandomCellGrow();
+    enemy.classList.add(enemyColor);
+    enemy.innerHTML = (randomGrowth * 0.35 | 0).toString();
+}
+
+function getRandomCellGrow() {
+    const enemies = document.getElementsByClassName(enemyColor);
+    const enemy = enemies[Math.floor(Math.random() * enemies.length)];
+    const enemyGrowth = enemy.innerHTML;
+    enemy.innerHTML = (enemyGrowth * 0.62 | 0).toString();
+    return enemyGrowth;
 }
 
 
 function winCondition() {
-    let virus, isEnemy = false;
-    for (virus of VIRUSES) {
-        console.log('--');
-        console.log(virus.avatar);
-        if (virus.avatar === enemyColor) {
+    let loose = false, virus, isEnemy = false;
+    const enemies = document.getElementsByClassName('cell');
+
+    for (virus of enemies) {
+        if (virus.classList.contains(enemyColor)) {
             isEnemy = true;
+        }
+        else if (virus.classList.contains(PLAYER_COLOR)) {
+            loose = true;
         }
     }
     if (!isEnemy) {
         alert('WYGRAŁEŚ!');
+    }
+    else if (!loose) {
+        alert('PRZEGRAŁEŚ');
     }
 }
