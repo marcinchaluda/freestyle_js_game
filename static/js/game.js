@@ -237,13 +237,17 @@ function getRandomCellGrow() {
 }
 
 function fight (sourceCell, targetCell) {
-    const attackers = Number(sourceCell.textContent) * 0.62 | 0;
+    const attackers = Number(sourceCell.textContent) * 0.35 | 0;
     let attackersColor;
     for (let color of AVATAR_COLORS) {
         sourceCell.classList.contains(color) ? attackersColor = color : null;
     }
     const defenders = Number(targetCell.textContent);
     const winner = {};
+    if (targetCell.classList.contains(PLAYER_COLOR)) {
+        targetCell.textContent = (Number(targetCell.textContent) + attackers).toString();
+        return;
+    }
     if (attackers > defenders) {
         winner.population = attackers - defenders;
         winner.cell = sourceCell;
@@ -255,6 +259,7 @@ function fight (sourceCell, targetCell) {
     }
     sourceCell.textContent = (Number(sourceCell.textContent) * 0.62 | 0).toString();
     targetCell.textContent = winner.population.toString();
+    if (winner.population === 0) targetCell.className = 'cell default pulse';
     setTimeout(winOrLoose, 500);
 }
 
