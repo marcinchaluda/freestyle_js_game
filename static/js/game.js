@@ -259,7 +259,10 @@ function fight (sourceCell, targetCell) {
     }
     sourceCell.textContent = (Number(sourceCell.textContent) * 0.62 | 0).toString();
     targetCell.textContent = winner.population.toString();
-    if (winner.population === 0) targetCell.className = 'cell default pulse';
+    if (winner.population === 0) {
+        targetCell.className = 'cell default pulse';
+        targetCell.textContent = '';
+    }
     setTimeout(winOrLoose, 500);
 }
 
