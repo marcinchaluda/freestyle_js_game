@@ -247,7 +247,7 @@ function fight (sourceCell, targetCell) {
     if (attackers > defenders) {
         winner.population = attackers - defenders;
         winner.cell = sourceCell;
-        targetCell.className = `cell ${attackersColor}`;
+        targetCell.className = `cell ${attackersColor} pulse`;
         if (attackersColor === PLAYER_COLOR) targetCell.setAttribute('draggable', 'true');
     } else {
         winner.population = defenders - attackers;
